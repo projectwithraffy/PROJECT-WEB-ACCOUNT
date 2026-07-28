@@ -474,17 +474,7 @@ body {
     gap: 12px;
   }
 
-  /* Kunci dimensi foto profil secara mutlak agar TIDAK GEPENG */
-  .profile-info img {
-    width: 45px !important;
-    height: 45px !important;
-    min-width: 45px !important;
-    min-height: 45px !important;
-    object-fit: cover;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
+  
   /* PASTIKAN: Elemen Jam Anda memiliki class yang jelas di kanan */
   .profile-info .jam-kanan {
     font-size: 16px;
@@ -543,8 +533,7 @@ body {
     min-width: 80px !important; /* Melarang keras ikon menghilang atau menciut */
     min-height: 80px !important;
     object-fit: cover;
-    pointer-events: auto !important; /* Mengaktifkan kembali fungsi klik/sentuh */
-  } 
+  }
 
   /* PANAH NAVIGASI: Dikunci di sisi kiri dan kanan luar Carousel Window */
   .nav-arrow { 
