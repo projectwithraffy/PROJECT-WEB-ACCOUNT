@@ -2,10 +2,10 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>@raffylive</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
        <!-- --- GANTI BLOK LAYAR LOADING LAMA ANDA DENGAN STRUKTUR BERSIH INI --- -->
@@ -50,8 +50,8 @@
     <!-- Jalur Geser Kotak Sampul Sosmed (GANTI TAUTAN DAN NAMA FILE GAMBAR DI SINI) -->
        <main class="main-dashboard">
     <!-- TAMBAHKAN DUA BARIS TOMBOL PANAH INI -->
-    <button class="nav-arrow left-arrow" id="arrowLeftBtn"><i class="fa-solid fa-chevron-left"></i></button>
-    <button class="nav-arrow right-arrow" id="arrowRightBtn"><i class="fa-solid fa-chevron-right"></i></button>
+    <button class="nav-arrow left-arrow" id="arrowLeftBtn"></button>
+    <button class="nav-arrow right-arrow" id="arrowRightBtn"></button>
 
     <div class="carousel-window">
         <div class="carousel-track" id="track">
@@ -80,181 +80,6 @@
             <div class="hint mobile-hint"><span class="key-icon">Swipe 🡠 🡢</span> Geser Menu</div>
         </footer>
 
-    <!-- Sistem Kontroler Logika Utama -->
-    <script>
-        const track = document.getElementById('track');
-        const tiles = document.querySelectorAll('.ps-tile');
-        const gameTitle = document.getElementById('game-title');
-        const gameDesc = document.getElementById('game-desc');
-        const loader = document.getElementById('loader');
-        const loadText = document.getElementById('loadText');
-        const startBtn = document.getElementById('startBtn');
-        
-        const sndStartup = document.getElementById('snd-startup');
-        const sndScroll = document.getElementById('snd-scroll');
-        const sndSelect = document.getElementById('snd-select');
-
-        let index = 0, isSystemReady = false, isLoadingFinished = false;
-
-        // Inisialisasi Konten Gambar Sampul
-    tiles.forEach(tile => {
-    const imgUrl = tile.getAttribute('data-img');
-    const iconClass = tile.getAttribute('data-icon');
-    
-    // PERBAIKAN: Menyusun ulang struktur agar string kelas ikon tidak pecah atau bocor
-    tile.innerHTML = `
-        <div class="tile-art">
-            <img src="${imgUrl}" class="cover-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-            <i class="fallback-icon" style="display:none;"></i>
-        </div>`;
-        
-    // Memasukkan nama kelas ikon secara aman langsung ke elemen tanpa manipulasi teks mentah
-    const iconElement = tile.querySelector('.fallback-icon');
-    if (iconClass === 'fa-heart') {
-        iconElement.classList.add('fa-solid', 'fa-heart');
-    } else {
-        iconElement.classList.add('fa-brands', iconClass);
-    }
-});
-
-
-        // MASALAH FIX DI SINI: Tanda kurung fungsi pada angka 50 sudah dihapus total!
-        const dustContainer = document.getElementById('dustContainer');
-        for (let i = 0; i < 15; i++) {
-            const dust = document.createElement('div');
-            dust.className = 'dust';
-            dust.style.width = dust.style.height = `${Math.floor(Math.random() * 5) + 3}px`;
-            dust.style.left = `${Math.random() * 100}%`;
-            dust.style.top = `${Math.random() * 50 + 50}%`;
-            dust.style.animationDuration = `${Math.random() * 10 + 12}s`;
-            dust.style.animationDelay = `${Math.random() * 6}s`;
-            dustContainer.appendChild(dust);
-        }
-
-        function playSound(audio) {
-            if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
-        }
-
-        setTimeout(() => {
-            document.getElementById('loadBar').style.display = 'none';
-            loadText.textContent = "PRESS ANY KEY OR CLICK TO START";
-            loadText.classList.add('blink-text');
-            isLoadingFinished = true;
-        }, 2200);
-
-        function startSystem() {
-            if (!isLoadingFinished || isSystemReady) return;
-            loader.classList.add('fade-out');
-            isSystemReady = true;
-            playSound(sndStartup);
-            setTimeout(() => loader.remove(), 800);
-        }
-
-        document.addEventListener('click', startSystem);
-        document.addEventListener('touchstart', startSystem);
-
-       // CARI DAN TIMPA FUNGSI KODE INI PADA INDEX.HTML ANDA
-function updatePS4UI(targetIndex) {
-    tiles.forEach((tile, i) => {
-        const active = i === targetIndex;
-        tile.classList.toggle('active', active);
-        if (active) {
-            gameTitle.textContent = tile.getAttribute('data-title').toUpperCase();
-            gameDesc.textContent = tile.getAttribute('data-desc');
-        }
-    });
-
-    // FIX: Deteksi akurat layar sentuh HP (Akan bergeser 135px). Jika Laptop/PC, geser tetap 165px penuh.
-    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
-    const currentStep = isTouchDevice ? 135 : 165;
-    
-    const offset = -(targetIndex * currentStep);
-    track.style.transform = `translate3d(${offset}px, 0, 0)`;
-    
-    if (isSystemReady) playSound(sndScroll);
-}
-        function executeLink() {
-            playSound(sndSelect);
-            setTimeout(() => window.open(tiles[index].href, '_blank'), 250);
-        }
-
-        startBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (isSystemReady) executeLink();
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (isLoadingFinished && !isSystemReady) { startSystem(); return; }
-            if (!isSystemReady) return;
-
-            if (e.key === 'ArrowRight' && index < tiles.length - 1) { e.preventDefault(); index++; updatePS4UI(index); }
-            else if (e.key === 'ArrowLeft' && index > 0) { e.preventDefault(); index--; updatePS4UI(index); }
-            else if (e.key === 'Enter') { e.preventDefault(); executeLink(); }
-        });
-
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches.screenX;
-        }, { passive: true });
-
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches.screenX;
-            handleSwipe();
-        }, { passive: true });
-
-        // CARI DAN TIMPA FUNGSI KODE INI PADA INDEX.HTML ANDA
-function handleSwipe() {
-    const swipeThreshold = 40; // Batas minimal jarak usapan jari (piksel)
-    if (!isSystemReady) return;
-
-    // Menghitung selisih jarak usapan jari pengguna
-    const swipeDistance = touchStartX - touchEndX;
-
-    // SWIPE KE KIRI (Jari mengusap ke kiri -> Menu maju/geser ke kanan)
-    if (swipeDistance > swipeThreshold) {
-        if (index < tiles.length - 1) { 
-            index++; 
-            updatePS4UI(index); 
-        }
-    }
-    // SWIPE KE KANAN (Jari mengusap ke kanan -> Menu mundur/geser ke kiri)
-    else if (swipeDistance < -swipeThreshold) {
-        if (index > 0) { 
-            index--; 
-            updatePS4UI(index); 
-        }
-    }
-}
-       setInterval(() => {
-    const now = new Date();
-    const timeString = now.toTimeString().substring(0, 5);
-    // Menambahkan spasi dan teks WIB di samping jam digital
-    document.getElementById('clock').textContent = `${timeString} WIB`;
-}, 1000);
-                // --- TAMBAHKAN LOGIKA KLIK TOMBOL PANAH HP DI SINI ---
-        const arrowLeftBtn = document.getElementById('arrowLeftBtn');
-        const arrowRightBtn = document.getElementById('arrowRightBtn');
-
-                // --- PASTIKAN LOGIKA TOMBOL NAVIGASI DI SCRIPT INDEX.HTML ANDA SEPERTI INI ---
-        arrowLeftBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (isSystemReady && index > 0) { 
-                index--; 
-                updatePS4UI(index); 
-            }
-        });
-
-        arrowRightBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (isSystemReady && index < tiles.length - 1) { 
-                index++; 
-                updatePS4UI(index); 
-            }
-        });
-
-    </script>
     <!-- Tautkan file JavaScript eksternal di sini -->
     <script src="script.js"></script>
 </body>
