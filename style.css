@@ -432,110 +432,78 @@ body {
 } 
 
 @media (max-width: 768px), (max-height: 500px) { 
-  /* RESET TOTAL GLOBAL */
   html, body { 
     width: 100%; 
-    height: 100%; 
+    min-height: 100vh; 
+    overflow-x: hidden; 
+    overflow-y: auto; 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow: hidden; /* Mengunci layar utama agar tidak goyang */
-    background-color: #1a1a1a;
+    position: relative;
   } 
 
-  /* CONTAINER UTAMA: Dibagi menjadi 3 zona vertikal yang kaku */
+  /* 1. WADAH UTAMA: Mengembalikan UI ke tengah vertikal layar */
   .ps4-system { 
     box-sizing: border-box;
-    width: 100%;
-    height: 100vh; 
-    padding: 20px;
+    padding: 20px 15px; 
+    min-height: 100vh; 
     display: flex;
     flex-direction: column; 
-    justify-content: space-between; /* Atas, Tengah, Bawah */
-    align-items: center;
+    justify-content: space-between; /* LOGIKA BARU: Mendorong header ke atas dan dashboard ke tengah/bawah secara seimbang */
+    align-items: stretch; 
   } 
 
-  /* ========================================================
-     ZONA 1: HEADER (PROFIL DI KIRI, JAM DI KANAN)
-     ======================================================== */
+  /* 2. HEADER: Profil di Kiri, Jam di Kanan */
   .profile-info { 
     display: flex !important; 
+    /* LOGIKA BARU: Mendorong elemen pertama (profil) ke ujung kiri 
+       dan elemen terakhir (jam/lainnya) ke ujung kanan */
     justify-content: space-between; 
     align-items: center;
     width: 100%;
-    height: 60px; /* Mengunci tinggi header agar tidak menekan elemen lain */
-    flex-shrink: 0;
+    margin-bottom: auto; /* Membantu mendorong konten di bawahnya agar tetap turun */
   }
 
-  /* PASTIKAN: Foto profil dan Username Anda dibungkus dalam satu DIV di dalam .profile-info */
-  .profile-info .pembungkus-profil-kiri {
+  /* Jika teks profil dan username Anda berada dalam satu pembungkus di dalam .profile-info */
+  .profile-info .user-box, 
+  .profile-info .avatar-group {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px; /* Jarak antara foto profil dan teks username */
   }
 
-  
-  /* PASTIKAN: Elemen Jam Anda memiliki class yang jelas di kanan */
-  .profile-info .jam-kanan {
-    font-size: 16px;
-    font-weight: bold;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  /* ========================================================
-     ZONA 2: DASHBOARD UTAMA (PAS DI TENGAH LAYAR HP)
-     ======================================================== */
-  .main-dashboard { 
-    position: relative; 
-    width: 100%; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1; /* Mengambil seluruh sisa ruang tengah secara adil */
-    margin: 20px 0;
+  .pc-hint { 
+    display: none !important; 
   } 
 
-  /* Teks petunjuk mobile dikunci tepat di atas carousel */
+  /* 3. TEKS PETUNJUK: Di tengah presisi */
   .mobile-hint { 
     display: flex !important; 
     justify-content: center; 
+    align-self: center; 
     text-align: center;
     width: 100%;
-    margin-bottom: 15px; 
+    margin-top: 20px;
+    margin-bottom: 10px; 
   } 
 
-  /* WINDOW CAROUSEL */
-  .carousel-window { 
-    box-sizing: border-box;
-    width: 80%; /* Menyisakan ruang kiri-kanan untuk panah navigasi */
-    height: 100px; /* Sesuaikan dengan tinggi ikon Anda */
-    display: flex; 
-    justify-content: center; 
-    align-items: center;
-    overflow: hidden; /* Mencegah item meluber merusak layout luar */
-  } 
-
-  /* TRACK CAROUSEL */
-  .carousel-track {
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-    gap: 15px; 
-    width: max-content !important; /* Memaksa track melar horizontal mengikuti jumlah ikon */
-  }
-
-  /* KUNCI DIMENSI IKON GAME / LINK AGAR TIDAK HILANG & PAS DI TENGAH */
   .ps-tile { 
-    width: 80px !important;   
-    height: 80px !important;  
-    min-width: 80px !important; /* Melarang keras ikon menghilang atau menciut */
-    min-height: 80px !important;
-    object-fit: cover;
-  }
+    width: 85px; /* Sedikit dinaikkan agar ikon link pertama terlihat lebih proporsional */
+    height: 85px; 
+    pointer-events: none !important; 
+  } 
 
-  /* PANAH NAVIGASI: Dikunci di sisi kiri dan kanan luar Carousel Window */
+  /* 4. AREA DASHBOARD UTAMA: Kembali ke tengah vertikal dan horizontal */
+  .main-dashboard { 
+    position: relative; 
+    width: 100%; 
+    margin: auto 0; /* LOGIKA BARU: 'auto' vertikal memaksa dashboard berada tepat di tengah sisa ruang layar */
+    display: flex;
+    justify-content: center;
+    align-self: center; 
+  } 
+
   .nav-arrow { 
     display: flex !important; 
     position: absolute; 
@@ -545,11 +513,31 @@ body {
   } 
 
   .left-arrow { 
-    left: 0; 
+    left: 5px; 
   } 
 
   .right-arrow { 
-    right: 0; 
+    right: 5px; 
   } 
-}
 
+  /* 5. CAROUSEL & TRACK: Memastikan item (termasuk ikon link pertama) di tengah presisi */
+  .carousel-window { 
+    box-sizing: border-box;
+    padding: 10px 0; 
+    width: 100%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; 
+  } 
+
+  .carousel-track {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    gap: 20px; /* Jarak antar ikon sedikit dilebarkan agar seimbang */
+    width: max-content; 
+    margin: 0 auto; 
+  }
+}
