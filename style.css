@@ -432,23 +432,27 @@ body {
 } 
 
 @media (max-width: 768px), (max-height: 500px) { 
+  /* 1. MEMBUAT LAYAR BISA DI-SCROLL & TIDAK MEMOTONG ATAS/BAWAH */
   html, body { 
     width: 100%; 
-    min-height: 100vh; /* Menggunakan min-height agar fleksibel */
-    overflow-x: hidden; /* Mencegah geser kanan-kiri yang rusak */
-    overflow-y: auto; /* Mengizinkan scroll vertikal jika konten panjang */
+    min-height: 100vh; 
+    overflow-x: hidden; 
+    overflow-y: auto; 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    position: relative; /* Mengganti 'fixed' agar konten atas tidak amblas */
   } 
 
+  /* 2. MENATA KONTEN UTAMA AGAR SEIMBANG */
   .ps4-system { 
     box-sizing: border-box;
-    padding: 15px 10px; /* Ditambahkan padding kanan-kiri agar tidak mepet layar */
-    min-height: 100vh; /* Fleksibel mengikuti tinggi layar HP */
+    padding: 20px 10px; 
+    min-height: 100vh; 
     display: flex;
-    flex-direction: column; /* Menyusun konten ke bawah */
-    justify-content: space-between; /* Memaksimalkan ruang vertikal */
+    flex-direction: column; 
+    justify-content: center; /* Memastikan semua grup konten berada di tengah vertikal */
+    align-items: center; /* Memastikan konten berada di tengah horizontal */
   } 
 
   .pc-hint { 
@@ -457,6 +461,8 @@ body {
 
   .mobile-hint { 
     display: flex !important; 
+    justify-content: center; /* Teks/hint otomatis di tengah */
+    width: 100%;
   } 
 
   .profile-info { 
@@ -464,41 +470,47 @@ body {
   } 
 
   .ps-tile { 
-    width: 80px; /* Diperkecil sedikit agar pas di layar HP kecil */
+    width: 80px; 
     height: 80px; 
     pointer-events: none !important; 
   } 
 
+  /* 3. MENGAUR DASHBOARD DI TENGAH */
   .main-dashboard { 
     position: relative; 
     width: 100%; 
-    margin-top: 0; /* Reset margin negatif yang berisiko merusak layout */
+    margin: 0 auto; /* Memaksa box dashboard berada di tengah layar */
+    display: flex;
+    justify-content: center;
+    align-items: center;
   } 
 
   .nav-arrow { 
     display: flex !important; 
-    position: absolute; /* Memastikan arrow menempel pada dashboard */
+    position: absolute; 
     top: 50%; 
-    transform: translateY(-50%); /* Menyelaraskan arrow tepat di tengah vertikal */
+    transform: translateY(-50%); 
+    z-index: 10; /* Memastikan panah tidak tertimpa gambar */
   } 
 
   .left-arrow { 
-    left: 5px; 
+    left: 10px; 
   } 
 
   .right-arrow { 
-    right: 5px; 
+    right: 10px; 
   } 
 
+  /* 4. MEMBUAT ITEM CAROUSEL PAS DI TENGAH LAYAR HP */
   .carousel-window { 
     box-sizing: border-box;
     padding: 10px 0; 
-    margin-left: 0; 
     width: 100%; 
     display: flex; 
-    justify-content: center; 
-    overflow-x: auto; /* Mengizinkan carousel di-scroll geser kanan-kiri di HP */
-    -webkit-overflow-scrolling: touch; /* Membuat scroll di iPhone lebih halus */
+    justify-content: center; /* Mengunci item di tengah jika jumlahnya sedikit */
+    align-items: center;
+    gap: 15px; /* Memberi jarak antar item agar rapi */
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; 
   } 
 }
-
