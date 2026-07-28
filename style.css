@@ -12,7 +12,7 @@
 
 body { 
     background-color: #020b18; 
-    min-height: 100vh; 
+    height: 100vh; /* FIX: Gunakan height, bukan min-height, agar centering selalu akurat */
     display: flex; 
     justify-content: center; 
     align-items: center; 
@@ -428,95 +428,56 @@ body {
 
 /* --- 9. LAYOUT ADAPTIF MOBILE SMARTPHONE (POTRET & LANSKAP) --- */
 .mobile-hint { 
-  display: none; 
-} 
-
-@media (max-width: 768px), (max-height: 500px) { 
-  html, body { 
-    width: 100%; 
-    min-height: 50vh; 
-    overflow-x: hidden; 
-    overflow-y: auto; 
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    position: relative;
-  } 
-
-  /* 1. WADAH UTAMA (Hanya mengatur aliran vertikal global) */
-  .ps4-system { 
-    box-sizing: border-box;
-    padding: 15px 10px; 
-    min-height: 100vh; 
-    display: flex;
-    flex-direction: column; 
-    justify-content: flex-start; 
-    align-items: stretch; /* LOGIKA BARU: Membiarkan elemen anak mengatur posisinya sendiri */
-  } 
-
-  /* 2. MENAMPILKAN KEMBALI USERNAME & PROFIL */
-  .profile-info { 
-    display: flex !important; /* LOGIKA BARU: Mengubah dari 'none' menjadi 'flex' agar muncul */
-    justify-content: flex; /* Memojokkan profil, username, dan jam ke KANAN atas */
-    align-items: center;
-    gap: 8px; /* Jarak antara foto, username, dan jam */
-    width: 100%;
-    margin-bottom: 20px; /* Jarak aman ke area dashboard di bawahnya */
-  }
-
-  .pc-hint { 
-    display: none !important; 
-  } 
-
-  .ps-tile { 
-    width: 80px; 
-    height: 80px; 
-    pointer-events: none !important; 
-  } 
-
-  /* 4. AREA DASHBOARD UTAMA TETAP DI TENGAH */
-  .main-dashboard { 
-    position: relative; 
-    width: 100%; 
-    margin: 0 auto; 
-    display: flex;
-    justify-content: center;
-    align-self: center; /* LOGIKA BARU: Memaksa dashboard & carousel tetap di tengah */
-  } 
-
-  .nav-arrow { 
-    display: flex !important; 
-    position: absolute; 
-    top: 50%; 
-    transform: translateY(-50%); 
-    z-index: 10; 
-  } 
-
-  .left-arrow { 
-    left: 5px; 
-  } 
-
-  .right-arrow { 
-    right: 5px; 
-  } 
-
-  .carousel-window { 
-    box-sizing: border-box;
-    padding: 20px 0; 
-    width: 100%; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center;
-    overflow-x: auto; 
-    -webkit-overflow-scrolling: touch; 
-  } 
-
-  .carousel-track {
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-    gap: 15px; 
-    width: max-content; 
-    margin: 0 auto; 
-  }
+    display: none; 
 }
+
+@media (max-width: 768px), (max-height: 500px) {
+    html, body {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        touch-action: pan-x;
+    }
+
+    .ps4-system { 
+        padding: 15px 0px; 
+        height: 100vh;
+        max-height: none; /* FIX: Hapus max-height agar tidak konflik */
+        justify-content: space-between; /* FIX: Gunakan space-between agar elemen menempel di atas dan bawah */
+    } 
+
+    .pc-hint { display: none !important; } 
+    .mobile-hint { display: flex !important; justify-content: center; width: 100%; } /* FIX: Posisikan hint di tengah */
+    .profile-info { display: none !important; } 
+
+    .ps-tile {
+        width: 100px;
+        height: 100px;
+        pointer-events: none !important; /* KUNCI KLIK LANGSUNG PADA GAMBAR */
+    }
+
+    .main-dashboard {
+        position: relative; 
+        width: 100%;
+        margin-top: -10px;
+    }
+    
+    .nav-arrow {
+        display: flex !important; 
+        top: 50%;
+    }
+    
+    .left-arrow { left: 10px; }   
+    .right-arrow { right: 10px; } 
+    
+    .carousel-window {
+        padding: 10px 0; 
+        margin-left: 0;
+        width: 100%; /* FIX: Hapus flexbox dari sini agar tidak mengganggu perhitungan track */
+    }
+
+    .carousel-track {
+        display: flex;
+        gap: 25px; 
+        width: max-content;
