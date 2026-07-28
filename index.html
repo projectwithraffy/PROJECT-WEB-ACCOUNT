@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@raffylive</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cloudflare.com">
+</head>
+<body>
+       <!-- --- GANTI BLOK LAYAR LOADING LAMA ANDA DENGAN STRUKTUR BERSIH INI --- -->
+<div class="ps4-loader" id="loader">
+    <div class="loader-content">
+        <h1 class="load-title">LOADING</h1>
+        <div class="glow-bar-load" id="loadBar"></div>
+        <!-- Pastikan tag p di bawah ini berada tepat di dalam div loader-content -->
+        <p class="load-text" id="loadText">raffylive</p>
+    </div>
+</div>
+
+
+    <!-- Papan Suara Konsole (Soundboard) -->
+    <audio id="snd-startup" src="startup.mp3" preload="auto"></audio>
+    <audio id="snd-scroll" src="scroll.mp3" preload="auto"></audio>
+    <audio id="snd-select" src="select.mp3" preload="auto"></audio>
+
+    <!-- Komponen Latar Belakang Ombak & Debu -->
+    <div class="ps4-wave-bg"></div>
+    <div class="dust-particles" id="dustContainer"></div>
+
+    <div class="ps4-system">
+        <!-- Header Kartu Identitas Pengguna -->
+        <!-- --- CARI BAGIAN INI DI HTML ANDA DAN PASTIKAN SAMA BERSIHNYA --- -->
+         
+<header class="profile-header">
+    <div class="profile-card">
+        <div class="avatar-box">
+            <img src="profil.gif" alt="Profile GIF" class="avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <i class="fa-solid fa-user fallback-user" style="display:none;"></i>
+            <div class="online-indicator"></div>
+        </div>
+        <div class="profile-info">
+            <h2 class="username">@raffy</h2>
+            <span class="status-text">Online</span>
+        </div>
+    </div>
+    <div class="time-display" id="clock">--:--</div>
+</header>
+
+    <!-- Jalur Geser Kotak Sampul Sosmed (GANTI TAUTAN DAN NAMA FILE GAMBAR DI SINI) -->
+       <main class="main-dashboard">
+    <!-- TAMBAHKAN DUA BARIS TOMBOL PANAH INI -->
+    <button class="nav-arrow left-arrow" id="arrowLeftBtn"><i class="fa-solid fa-chevron-left"></i></button>
+    <button class="nav-arrow right-arrow" id="arrowRightBtn"><i class="fa-solid fa-chevron-right"></i></button>
+
+    <div class="carousel-window">
+        <div class="carousel-track" id="track">
+                    <a href="https://sociabuzz.com/raffyyy/support" class="ps-tile active" data-title="Donate & Support" data-desc="Support the creator. Every contribution keeps the project alive." data-img="sociabuzz.png" data-icon="fa-heart"></a>
+                    <a href="https://discord.gg/BB3cvSXyHh" class="ps-tile" data-title="Discord RaffyDistrik" data-desc="Join our primary text and voice channels. Chat with the global community." data-img="discord.png" data-icon="fa-discord"></a>
+                    <a href="https://discord.gg/RTuqegUFBK" class="ps-tile" data-title="Discord ERYTH" data-desc="Secondary community lounge for events and emergency updates." data-img="discord.png" data-icon="fa-discord"></a>
+                    <a href="https://whatsapp.com/channel/0029Vakx3B9JENy8mhTdPs42" class="ps-tile" data-title="Saluran Whatsapp" data-desc="Direct message for fast-response business inquiries or personal chat." data-img="whatsapp.jpg" data-icon="fa-whatsapp"></a>
+                    <a href="http://instagram.com/raffybagas_" class="ps-tile" data-title="Instagram Account" data-desc="Check out my daily updates, behind-the-scenes photography, and stories." data-img="instagram.png" data-icon="fa-instagram"></a>
+                    <a href="https://youtube.com/@raffylive" class="ps-tile" data-title="YouTube Channel" data-desc="Watch high-quality video content, programming guides, and live streams." data-img="youtube.png" data-icon="fa-youtube"></a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer Informasi Aplikasi Aktif -->
+        <section class="content-info">
+            <h1 id="game-title">DONATE & SUPPORT</h1>
+            <div class="action-btn-container">
+                <button class="start-btn" id="startBtn">Start</button>
+            </div>
+            <p id="game-desc">Support the creator. Every contribution keeps the project alive.</p>
+        </section>
+
+        <!-- Navigasi Tombol Footer -->
+    <footer class="footer-bar">
+            <div class="hint pc-hint"><span class="key-icon yellow">Enter</span> Open</div>
+            <div class="hint mobile-hint"><span class="key-icon">Swipe 🡠 🡢</span> Geser Menu</div>
+        </footer>
+
+    <!-- Sistem Kontroler Logika Utama -->
+    <script>
+        const track = document.getElementById('track');
+        const tiles = document.querySelectorAll('.ps-tile');
+        const gameTitle = document.getElementById('game-title');
+        const gameDesc = document.getElementById('game-desc');
+        const loader = document.getElementById('loader');
+        const loadText = document.getElementById('loadText');
+        const startBtn = document.getElementById('startBtn');
+        
+        const sndStartup = document.getElementById('snd-startup');
+        const sndScroll = document.getElementById('snd-scroll');
+        const sndSelect = document.getElementById('snd-select');
+
+        let index = 0, isSystemReady = false, isLoadingFinished = false;
+
+        // Inisialisasi Konten Gambar Sampul
+    tiles.forEach(tile => {
+    const imgUrl = tile.getAttribute('data-img');
+    const iconClass = tile.getAttribute('data-icon');
+    
+    // PERBAIKAN: Menyusun ulang struktur agar string kelas ikon tidak pecah atau bocor
+    tile.innerHTML = `
+        <div class="tile-art">
+            <img src="${imgUrl}" class="cover-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <i class="fallback-icon" style="display:none;"></i>
+        </div>`;
+        
+    // Memasukkan nama kelas ikon secara aman langsung ke elemen tanpa manipulasi teks mentah
+    const iconElement = tile.querySelector('.fallback-icon');
+    if (iconClass === 'fa-heart') {
+        iconElement.classList.add('fa-solid', 'fa-heart');
+    } else {
+        iconElement.classList.add('fa-brands', iconClass);
+    }
+});
+
+
+        // MASALAH FIX DI SINI: Tanda kurung fungsi pada angka 50 sudah dihapus total!
+        const dustContainer = document.getElementById('dustContainer');
+        for (let i = 0; i < 15; i++) {
+            const dust = document.createElement('div');
+            dust.className = 'dust';
+            dust.style.width = dust.style.height = `${Math.floor(Math.random() * 5) + 3}px`;
+            dust.style.left = `${Math.random() * 100}%`;
+            dust.style.top = `${Math.random() * 50 + 50}%`;
+            dust.style.animationDuration = `${Math.random() * 10 + 12}s`;
+            dust.style.animationDelay = `${Math.random() * 6}s`;
+            dustContainer.appendChild(dust);
+        }
+
+        function playSound(audio) {
+            if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+        }
+
+        setTimeout(() => {
+            document.getElementById('loadBar').style.display = 'none';
+            loadText.textContent = "PRESS ANY KEY OR CLICK TO START";
+            loadText.classList.add('blink-text');
+            isLoadingFinished = true;
+        }, 2200);
+
+        function startSystem() {
+            if (!isLoadingFinished || isSystemReady) return;
+            loader.classList.add('fade-out');
+            isSystemReady = true;
+            playSound(sndStartup);
+            setTimeout(() => loader.remove(), 800);
+        }
+
+        document.addEventListener('click', startSystem);
+        document.addEventListener('touchstart', startSystem);
+
+       // CARI DAN TIMPA FUNGSI KODE INI PADA INDEX.HTML ANDA
+function updatePS4UI(targetIndex) {
+    tiles.forEach((tile, i) => {
+        const active = i === targetIndex;
+        tile.classList.toggle('active', active);
+        if (active) {
+            gameTitle.textContent = tile.getAttribute('data-title').toUpperCase();
+            gameDesc.textContent = tile.getAttribute('data-desc');
+        }
+    });
+
+    // FIX: Deteksi akurat layar sentuh HP (Akan bergeser 135px). Jika Laptop/PC, geser tetap 165px penuh.
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+    const currentStep = isTouchDevice ? 135 : 165;
+    
+    const offset = -(targetIndex * currentStep);
+    track.style.transform = `translate3d(${offset}px, 0, 0)`;
+    
+    if (isSystemReady) playSound(sndScroll);
+}
+        function executeLink() {
+            playSound(sndSelect);
+            setTimeout(() => window.open(tiles[index].href, '_blank'), 250);
+        }
+
+        startBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isSystemReady) executeLink();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (isLoadingFinished && !isSystemReady) { startSystem(); return; }
+            if (!isSystemReady) return;
+
+            if (e.key === 'ArrowRight' && index < tiles.length - 1) { e.preventDefault(); index++; updatePS4UI(index); }
+            else if (e.key === 'ArrowLeft' && index > 0) { e.preventDefault(); index--; updatePS4UI(index); }
+            else if (e.key === 'Enter') { e.preventDefault(); executeLink(); }
+        });
+
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches.screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches.screenX;
+            handleSwipe();
+        }, { passive: true });
+
+        // CARI DAN TIMPA FUNGSI KODE INI PADA INDEX.HTML ANDA
+function handleSwipe() {
+    const swipeThreshold = 40; // Batas minimal jarak usapan jari (piksel)
+    if (!isSystemReady) return;
+
+    // Menghitung selisih jarak usapan jari pengguna
+    const swipeDistance = touchStartX - touchEndX;
+
+    // SWIPE KE KIRI (Jari mengusap ke kiri -> Menu maju/geser ke kanan)
+    if (swipeDistance > swipeThreshold) {
+        if (index < tiles.length - 1) { 
+            index++; 
+            updatePS4UI(index); 
+        }
+    }
+    // SWIPE KE KANAN (Jari mengusap ke kanan -> Menu mundur/geser ke kiri)
+    else if (swipeDistance < -swipeThreshold) {
+        if (index > 0) { 
+            index--; 
+            updatePS4UI(index); 
+        }
+    }
+}
+       setInterval(() => {
+    const now = new Date();
+    const timeString = now.toTimeString().substring(0, 5);
+    // Menambahkan spasi dan teks WIB di samping jam digital
+    document.getElementById('clock').textContent = `${timeString} WIB`;
+}, 1000);
+                // --- TAMBAHKAN LOGIKA KLIK TOMBOL PANAH HP DI SINI ---
+        const arrowLeftBtn = document.getElementById('arrowLeftBtn');
+        const arrowRightBtn = document.getElementById('arrowRightBtn');
+
+                // --- PASTIKAN LOGIKA TOMBOL NAVIGASI DI SCRIPT INDEX.HTML ANDA SEPERTI INI ---
+        arrowLeftBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isSystemReady && index > 0) { 
+                index--; 
+                updatePS4UI(index); 
+            }
+        });
+
+        arrowRightBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (isSystemReady && index < tiles.length - 1) { 
+                index++; 
+                updatePS4UI(index); 
+            }
+        });
+
+        // Fungsi pemicu eksekusi link utama (Hanya dipanggil oleh tombol Start / Keyboard Enter)
+        function executeLink() {
+            playSound(sndSelect);
+            // Mengambil alamat url (href) murni berdasarkan ubin index yang sedang aktif menyala
+            setTimeout(() => window.open(tiles[index].href, '_blank'), 250);
+        }
+
+    </script>
+</body>
+</html>
