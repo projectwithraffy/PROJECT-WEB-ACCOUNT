@@ -20,7 +20,6 @@ body {
     font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
 
-/* Prevent pointer cursor disabling globally; only restrict selection on UI elements */
 :where(button, a) { cursor: pointer; }
 
 /* --- 1. LAYAR LOADING SCREEN --- */
@@ -154,7 +153,7 @@ body {
     display: flex; 
     flex-direction: column; 
     justify-content: space-between; 
-    padding: 40px 60px; 
+    padding: 50px 70px; 
 }
 
 /* --- 4. PROFIL USER HEADER --- */
@@ -260,6 +259,7 @@ body {
     text-decoration: none; 
     overflow: hidden; 
     transition: all 0.3s ease; 
+    pointer-events: auto;
 }
 
 .tile-art { 
@@ -269,7 +269,6 @@ body {
     display: flex; 
     justify-content: center; 
     align-items: center; 
-    pointer-events: none; 
 }
 
 .cover-img { 
@@ -284,6 +283,7 @@ body {
 }
 
 .fallback-icon { 
+    display: inline-block;
     font-size: 2.8rem; 
     color: rgba(255, 255, 255, 0.6); 
     position: relative; 
@@ -375,129 +375,4 @@ body {
 }
 
 .start-btn:active { 
-    background: #0072ce; 
-    color: #fff; 
-}
-
-#game-desc { 
-    font-size: 0.9rem; 
-    color: rgba(255, 255, 255, 0.6); 
-    max-width: 650px; 
-    line-height: 1.6; 
-}
-
-/* --- 8. FOOTER BUTTON HINTS --- */
-.footer-bar { 
-    display: flex; 
-    gap: 30px; 
-    border-top: 1px solid rgba(255, 255, 255, 0.08); 
-    padding-top: 15px; 
-}
-
-.hint { 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    font-size: 0.85rem; 
-    color: rgba(255, 255, 255, 0.4); 
-    letter-spacing: 0.5px;
-}
-
-.key-icon { 
-    background: #111923; 
-    padding: 3px 12px; 
-    border-radius: 4px; 
-    border: 1px solid rgba(255, 255, 255, 0.15); 
-    color: #fff; 
-    font-size: 0.75rem; 
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 24px;
-}
-
-.key-icon.yellow { 
-    color: #f1c40f; 
-    font-weight: bold; 
-}
-
-.nav-icon::before {
-    content: "\2194"; 
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 0.85rem;
-    font-weight: bold;
-}
-
-/* --- 9. LAYOUT ADAPTIF MOBILE SMARTPHONE (POTRET & LANSKAP) --- */
-.mobile-hint { 
-    display: none; 
-}
-
-@media (max-width: 768px), (max-height: 500px) {
-    html, body {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        touch-action: pan-x;
-    }
-
-    .ps4-system { 
-        padding: 15px 0px; 
-        height: 100vh;
-        max-height: 100%;
-        justify-content: space-around; 
-    } 
-
-    .pc-hint { display: none !important; } 
-    .mobile-hint { display: flex !important; } 
-    .profile-info { display: none !important; } 
-
-    .ps-tile {
-        width: 100px;
-        height: 100px;
-        pointer-events: none !important; /* KUNCI KLIK LANGSUNG PADA GAMBAR */
-    }
-
-    .main-dashboard {
-        position: relative; 
-        width: 100%;
-        margin-top: -10px;
-    }
-    
-    .nav-arrow {
-        display: flex !important; 
-        top: 50%;
-    }
-    
-    .left-arrow { left: 10px; }   
-    .right-arrow { right: 10px; } 
-    
-    .carousel-window {
-        padding: 10px 0; 
-        margin-left: 0;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-
-    .carousel-track {
-        display: flex;
-        gap: 25px; 
-        width: max-content;
-    }
-
-    /* Adjust sizes for small screens */
-    .ps4-system { padding: 12px; }
-    .load-title { font-size: 1.6rem; }
-    .glow-bar-load { width: 150px; }
-}
-
-/* Accessibility helper: allow text selection where useful */
-.content-info, .profile-info, .ps-tile, .loader-content { user-select: text; }
-
-/* Placeholder image helper (replace or remove if real assets exist) */
-.cover-img[src$="placeholder.png"] { opacity: 0.6; filter: grayscale(0.3); }
-
-/* End of file */
+{
