@@ -443,54 +443,65 @@ body {
     position: relative;
   } 
 
-  /* 1. WADAH UTAMA (Hanya mengatur aliran vertikal global) */
+  /* 1. WADAH UTAMA: Mengembalikan UI ke tengah vertikal layar */
   .ps4-system { 
     box-sizing: border-box;
-    padding: 15px 10px; 
+    padding: 20px 15px; 
     min-height: 100vh; 
     display: flex;
     flex-direction: column; 
-    justify-content: flex-start; 
-    align-items: stretch; /* LOGIKA BARU: Membiarkan elemen anak mengatur posisinya sendiri */
+    justify-content: space-between; /* LOGIKA BARU: Mendorong header ke atas dan dashboard ke tengah/bawah secara seimbang */
+    align-items: stretch; 
   } 
 
-  /* 2. MENAMPILKAN KEMBALI USERNAME & PROFIL */
+  /* 2. HEADER: Profil di Kiri, Jam di Kanan */
   .profile-info { 
-    display: flex !important; /* LOGIKA BARU: Mengubah dari 'none' menjadi 'flex' agar muncul */
-    justify-content: flex-end; /* Memojokkan profil, username, dan jam ke KANAN atas */
+    display: flex !important; 
+    /* LOGIKA BARU: Mendorong elemen pertama (profil) ke ujung kiri 
+       dan elemen terakhir (jam/lainnya) ke ujung kanan */
+    justify-content: space-between; 
     align-items: center;
-    gap: 10px; /* Jarak antara foto, username, dan jam */
     width: 100%;
-    margin-bottom: 20px; /* Jarak aman ke area dashboard di bawahnya */
+    margin-bottom: auto; /* Membantu mendorong konten di bawahnya agar tetap turun */
+  }
+
+  /* Jika teks profil dan username Anda berada dalam satu pembungkus di dalam .profile-info */
+  .profile-info .user-box, 
+  .profile-info .avatar-group {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Jarak antara foto profil dan teks username */
   }
 
   .pc-hint { 
     display: none !important; 
   } 
 
-  /* 3. TEKS PETUNJUK TETAP DI TENGAH */
+  /* 3. TEKS PETUNJUK: Di tengah presisi */
   .mobile-hint { 
     display: flex !important; 
     justify-content: center; 
-    align-self: center; /* LOGIKA BARU: Memaksa elemen ini saja yang di tengah */
+    align-self: center; 
+    text-align: center;
     width: 100%;
-    margin-bottom: 15px; 
+    margin-top: 20px;
+    margin-bottom: 10px; 
   } 
 
   .ps-tile { 
-    width: 80px; 
-    height: 80px; 
+    width: 85px; /* Sedikit dinaikkan agar ikon link pertama terlihat lebih proporsional */
+    height: 85px; 
     pointer-events: none !important; 
   } 
 
-  /* 4. AREA DASHBOARD UTAMA TETAP DI TENGAH */
+  /* 4. AREA DASHBOARD UTAMA: Kembali ke tengah vertikal dan horizontal */
   .main-dashboard { 
     position: relative; 
     width: 100%; 
-    margin: 0 auto; 
+    margin: auto 0; /* LOGIKA BARU: 'auto' vertikal memaksa dashboard berada tepat di tengah sisa ruang layar */
     display: flex;
     justify-content: center;
-    align-self: center; /* LOGIKA BARU: Memaksa dashboard & carousel tetap di tengah */
+    align-self: center; 
   } 
 
   .nav-arrow { 
@@ -509,6 +520,7 @@ body {
     right: 5px; 
   } 
 
+  /* 5. CAROUSEL & TRACK: Memastikan item (termasuk ikon link pertama) di tengah presisi */
   .carousel-window { 
     box-sizing: border-box;
     padding: 10px 0; 
@@ -524,7 +536,7 @@ body {
     display: flex;
     justify-content: center; 
     align-items: center;
-    gap: 15px; 
+    gap: 20px; /* Jarak antar ikon sedikit dilebarkan agar seimbang */
     width: max-content; 
     margin: 0 auto; 
   }
