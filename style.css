@@ -481,3 +481,24 @@ body {
         display: flex;
         gap: 25px; 
         width: max-content;
+    }
+}
+
+/* --- 10. PENYESUAIAN UKURAN FONT & ELEMEN UNTUK MOBILE --- */
+@media (max-width: 768px) {
+    /* Mengurangi ukuran font judul di layar loading */
+    .load-title {
+        font-size: 2rem;
+        letter-spacing: 6px;
+    }
+
+    /* Mengurangi ukuran font judul utama dan deskripsi */
+    .content-info h1 {
+        font-size: 1.5rem; /* Lebih kecil dari 1.9rem */
+    }
+    #game-desc {
+        font-size: 0.85rem; /* Sedikit lebih kecil */
+        line-height: 1.5;
+        max-width: 90%; /* Batasi lebar agar tidak terlalu mepet ke tepi */
+    }
+}
