@@ -254,13 +254,8 @@ function handleSwipe() {
             }
         });
 
-        // Fungsi pemicu eksekusi link utama (Hanya dipanggil oleh tombol Start / Keyboard Enter)
-        function executeLink() {
-            playSound(sndSelect);
-            // Mengambil alamat url (href) murni berdasarkan ubin index yang sedang aktif menyala
-            setTimeout(() => window.open(tiles[index].href, '_blank'), 250);
-        }
-
     </script>
+    <!-- Tautkan file JavaScript eksternal di sini -->
+    <script src="script.js"></script>
 </body>
 </html>
