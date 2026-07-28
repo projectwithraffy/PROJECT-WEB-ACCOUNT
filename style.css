@@ -427,3 +427,76 @@ body {
 }
 
 /* --- 9. LAYOUT ADAPTIF MOBILE SMARTPHONE (POTRET & LANSKAP) --- */
+.mobile-hint { 
+  display: none; 
+} 
+
+@media (max-width: 768px), (max-height: 500px) { 
+  html, body { 
+    width: 100%; 
+    min-height: 100vh; 
+    overflow-x: hidden; 
+    overflow-y: auto; 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    position: relative;
+  } 
+
+  .ps4-system { 
+    box-sizing: border-box;
+    padding: 30px 10px 15px 10px; /* Tambah padding atas (30px) agar link pertama tidak tertutup */
+    min-height: 100vh; 
+    display: flex;
+    flex-direction: column; 
+    justify-content: flex-start; /* Mulai dari atas agar elemen berurutan rapi */
+    align-items: center; 
+  } 
+
+  .pc-hint { 
+    display: none !important; 
+  } 
+
+  .mobile-hint { 
+    display: flex !important; 
+    justify-content: center; 
+    width: 100%;
+    margin-bottom: 15px; /* Jarak aman ke dashboard di bawahnya */
+  } 
+
+  .profile-info { 
+    display: none !important; 
+  } 
+
+  .ps-tile { 
+    width: 80px; 
+    height: 80px; 
+    pointer-events: none !important; 
+  } 
+
+  .main-dashboard { 
+    position: relative; 
+    width: 100%; 
+    margin: 0 auto; 
+    display: flex;
+    justify-content: center;
+  } 
+
+  .nav-arrow { 
+    display: flex !important; 
+    position: absolute; 
+    top: 50%; 
+    transform: translateY(-50%); 
+    z-index: 10; 
+  } 
+
+  .left-arrow { 
+    left: 5px; 
+  } 
+
+  .right-arrow { 
+    right: 5px; 
+  } 
+
+  /* ========================================================
+    
