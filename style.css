@@ -432,108 +432,121 @@ body {
 } 
 
 @media (max-width: 768px), (max-height: 500px) { 
+  /* RESET TOTAL GLOBAL */
   html, body { 
     width: 100%; 
-    min-height: 100vh; 
+    height: 100%; 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    overflow-x: hidden;
-    overflow-y: auto;
-    background-color: #1a1a1a; /* Menyesuaikan background gelap PS4 UI */
+    overflow: hidden; /* Mengunci layar utama agar tidak goyang */
+    background-color: #1a1a1a;
   } 
 
-  /* 1. WADAH UTAMA */
+  /* CONTAINER UTAMA: Dibagi menjadi 3 zona vertikal yang kaku */
   .ps4-system { 
     box-sizing: border-box;
-    padding: 20px 15px; 
-    min-height: 100vh; 
+    width: 100%;
+    height: 100vh; 
+    padding: 20px;
     display: flex;
     flex-direction: column; 
-    justify-content: flex-start; 
-    align-items: center; 
+    justify-content: space-between; /* Atas, Tengah, Bawah */
+    align-items: center;
   } 
 
-  /* 2. HEADER: Mengunci Profil di Kiri & Jam di Kanan Tanpa Saling Himpit */
+  /* ========================================================
+     ZONA 1: HEADER (PROFIL DI KIRI, JAM DI KANAN)
+     ======================================================== */
   .profile-info { 
     display: flex !important; 
     justify-content: space-between; 
     align-items: center;
     width: 100%;
-    margin-bottom: 40px; /* Memberi jarak aman agar dashboard turun ke bawah */
+    height: 60px; /* Mengunci tinggi header agar tidak menekan elemen lain */
     flex-shrink: 0;
   }
 
-  /* Kunci area Profil & Username di sebelah Kiri */
-  .profile-info .user-left,
-  .profile-info .avatar-group {
+  /* PASTIKAN: Foto profil dan Username Anda dibungkus dalam satu DIV di dalam .profile-info */
+  .profile-info .pembungkus-profil-kiri {
     display: flex;
     align-items: center;
     gap: 12px;
-    max-width: 70%; /* Mencegah username meluber ke area jam */
   }
 
-  /* ANTI GEPENG: Kunci dimensi gambar profil secara mutlak */
-  .profile-info img, 
-  .profile-info .avatar,
-  .profile-info [class*="avatar"],
-  .profile-info [class*="profile"] {
+  /* Kunci dimensi foto profil secara mutlak agar TIDAK GEPENG */
+  .profile-info img {
     width: 45px !important;
     height: 45px !important;
-    min-width: 45px !important; /* Melarang keras ciut horizontal */
-    min-height: 45px !important; /* Melarang keras ciut vertikal */
+    min-width: 45px !important;
+    min-height: 45px !important;
     object-fit: cover;
     border-radius: 50%;
-    flex-shrink: 0 !important;
+    flex-shrink: 0;
   }
 
-  /* Kunci Status Online agar tidak menabrak Jam */
-  .profile-info .status-online,
-  .profile-info .username-text {
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* Potong teks dengan titik tiga jika terlalu panjang */
-  }
-
-  /* Kunci posisi Jam di sebelah Kanan */
-  .profile-info .clock,
-  .profile-info .time,
-  .profile-info [class*="clock"],
-  .profile-info [class*="time"] {
+  /* PASTIKAN: Elemen Jam Anda memiliki class yang jelas di kanan */
+  .profile-info .jam-kanan {
     font-size: 16px;
     font-weight: bold;
     white-space: nowrap;
-    flex-shrink: 0; /* Melarang jam bergeser atau menciut */
-    margin-left: 15px;
+    flex-shrink: 0;
   }
 
-  .pc-hint { 
-    display: none !important; 
+  /* ========================================================
+     ZONA 2: DASHBOARD UTAMA (PAS DI TENGAH LAYAR HP)
+     ======================================================== */
+  .main-dashboard { 
+    position: relative; 
+    width: 100%; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1; /* Mengambil seluruh sisa ruang tengah secara adil */
+    margin: 20px 0;
   } 
 
-  /* 3. TEKS PETUNJUK */
+  /* Teks petunjuk mobile dikunci tepat di atas carousel */
   .mobile-hint { 
     display: flex !important; 
     justify-content: center; 
     text-align: center;
     width: 100%;
-    margin-bottom: 20px; 
-    flex-shrink: 0;
+    margin-bottom: 15px; 
   } 
 
-  /* 4. DASHBOARD UTAMA: Mengunci Posisi Horizontal & Vertikal */
-  .main-dashboard { 
-    position: relative; 
-    width: 100%; 
-    margin-top: 20px; /* Menurunkan navigasi dan ikon secara manual agar tidak terlalu ke atas */
-    display: flex;
-    justify-content: center;
+  /* WINDOW CAROUSEL */
+  .carousel-window { 
+    box-sizing: border-box;
+    width: 80%; /* Menyisakan ruang kiri-kanan untuk panah navigasi */
+    height: 100px; /* Sesuaikan dengan tinggi ikon Anda */
+    display: flex; 
+    justify-content: center; 
     align-items: center;
-    flex-shrink: 0;
+    overflow: hidden; /* Mencegah item meluber merusak layout luar */
   } 
 
-  /* Menyelaraskan Panah Navigasi Kiri & Kanan Tepat di Samping Carousel */
+  /* TRACK CAROUSEL */
+  .carousel-track {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    gap: 15px; 
+    width: max-content !important; /* Memaksa track melar horizontal mengikuti jumlah ikon */
+  }
+
+  /* KUNCI DIMENSI IKON GAME / LINK AGAR TIDAK HILANG & PAS DI TENGAH */
+  .ps-tile { 
+    width: 80px !important;   
+    height: 80px !important;  
+    min-width: 80px !important; /* Melarang keras ikon menghilang atau menciut */
+    min-height: 80px !important;
+    object-fit: cover;
+    pointer-events: auto !important; /* Mengaktifkan kembali fungsi klik/sentuh */
+  } 
+
+  /* PANAH NAVIGASI: Dikunci di sisi kiri dan kanan luar Carousel Window */
   .nav-arrow { 
     display: flex !important; 
     position: absolute; 
@@ -543,44 +556,11 @@ body {
   } 
 
   .left-arrow { 
-    left: 0px; 
+    left: 0; 
   } 
 
   .right-arrow { 
-    right: 0px; 
+    right: 0; 
   } 
-
-  /* 5. CAROUSEL WINDOW & TRACK: Mengembalikan Ikon yang Hilang */
-  .carousel-window { 
-    box-sizing: border-box;
-    padding: 10px 0; 
-    width: 85%; /* Menyisakan ruang 15% di kanan-kiri untuk panah navigasi */
-    display: flex; 
-    justify-content: center; 
-    align-items: center;
-    overflow: hidden; /* Menyembunyikan item yang belum aktif */
-  } 
-
-  .carousel-track {
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-    gap: 15px; 
-    width: max-content !important; /* Memaksa track melar mengikuti isi ikon */
-    margin: 0 auto; 
-  }
-
-  /* MEMUNCULKAN KEMBALI IKON GAME / LINK */
-  .ps-tile,
-  .carousel-track > div,
-  .carousel-track a { 
-    width: 80px !important;   /* Kunci lebar item mobile secara mutlak */
-    height: 80px !important;  /* Kunci tinggi item mobile secara mutlak */
-    min-width: 80px !important; /* Mencegah ikon menghilang akibat terhimpit */
-    min-height: 80px !important;
-    display: flex !important;   /* Memastikan elemen pembungkusnya aktif */
-    justify-content: center;
-    align-items: center;
-    pointer-events: auto !important; /* Aktifkan kembali klik link pada mobile */
-  }
 }
+
