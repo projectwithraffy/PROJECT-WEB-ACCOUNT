@@ -434,49 +434,59 @@ body {
 @media (max-width: 768px), (max-height: 500px) { 
   html, body { 
     width: 100%; 
-    height: 100%; /* Mengunci tinggi dasar agar kalkulasi posisi vertikal akurat */
+    min-height: 100vh; 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     overflow-x: hidden;
     overflow-y: auto;
+    background-color: #000; /* Menghindari area putih jika layar melar */
   } 
 
-  /* 1. KONTEN UTAMA: Fokus menjadi wadah jangkar vertikal */
+  /* 1. KONTEN UTAMA: Berpusat secara proporsional, bukan melar dipaksa */
   .ps4-system { 
     box-sizing: border-box;
     padding: 20px 15px; 
-    height: 100vh; /* Memaksa tinggi pas satu layar HP penuh */
-    min-height: -webkit-fill-available; /* Perbaikan bug tinggi layar pada Chrome/Safari mobile */
+    min-height: 100vh; 
     display: flex;
     flex-direction: column; 
-    justify-content: flex-start; /* Aliran dasar dari atas ke bawah */
-    align-items: stretch; 
-    position: relative;
+    justify-content: flex-start; /* Aliran natural dari atas ke bawah */
+    align-items: center; 
+    gap: 25px; /* LOGIKA BARU: Mengunci jarak antar komponen agar TIDAK kejauhan */
   } 
 
-  /* 2. HEADER: Memisahkan Profil (Kiri) dan Jam (Kanan) secara mandiri */
+  /* 2. HEADER: Profil Kiri, Jam Kanan (Lebar Penuh) */
   .profile-info { 
     display: flex !important; 
     justify-content: space-between; 
     align-items: center;
     width: 100%;
-    flex-shrink: 0; /* Mencegah header gepeng atau mengecil */
+    margin-bottom: 10px; /* Jarak konstan ke bawah */
+    flex-shrink: 0;
+  }
+
+  /* MENGATASI PROFIL GEPENG: Mengunci ukuran elemen gambar/avatar */
+  .profile-info img, 
+  .profile-info .avatar, 
+  .profile-info .profile-pic {
+    width: 40px !important;   /* Sesuaikan dengan ukuran avatar HP Anda */
+    height: 40px !important;  /* Wajib sama dengan width agar bulat/kotak sempurna */
+    object-fit: cover;        /* Mencegah gambar terdistorsi/gepeng */
+    border-radius: 50%;       /* Menjaga tetap bulat sempurna jika UI bulat */
+    flex-shrink: 0;           /* Melarang keras browser menciutkan gambar */
   }
 
   .pc-hint { 
     display: none !important; 
   } 
 
-  /* 3. TEKS PETUNJUK: Berada di atas dashboard sedikit */
+  /* 3. TEKS PETUNJUK: Berada pas di atas dashboard */
   .mobile-hint { 
     display: flex !important; 
     justify-content: center; 
-    align-self: center; 
     text-align: center;
     width: 100%;
-    margin-top: auto; /* LOGIKA BARU: Mendorong teks ini ke tengah bawah bersama dashboard */
-    margin-bottom: 10px; 
+    margin: 0; /* Hapus margin auto yang membuat renggang */
   } 
 
   .ps-tile { 
@@ -485,16 +495,14 @@ body {
     pointer-events: none !important; 
   } 
 
-  /* 4. DASHBOARD UTAMA: Dipaksa menetap di tengah vertikal layar */
+  /* 4. DASHBOARD UTAMA: Mengumpul rapat di tengah */
   .main-dashboard { 
     position: relative; 
     width: 100%; 
-    /* LOGIKA UTAMA: 'margin-bottom: auto' berpasangan dengan 'margin-top: auto' pada mobile-hint 
-       akan mengunci dashboard tepat di tengah-tengah sisa ruang vertikal layar */
-    margin-bottom: auto; 
+    margin: 0; /* Hapus margin auto vertikal */
     display: flex;
     justify-content: center;
-    align-self: center; 
+    align-items: center;
   } 
 
   .nav-arrow { 
@@ -506,14 +514,14 @@ body {
   } 
 
   .left-arrow { 
-    left: 5px; 
+    left: -5px; /* Geser sedikit keluar agar tidak menumpuk ikon game */
   } 
 
   .right-arrow { 
-    right: 5px; 
+    right: -5px; 
   } 
 
-  /* 5. CAROUSEL & TRACK: Menjaga ikon link pertama tetap di tengah horizontal */
+  /* 5. CAROUSEL & TRACK */
   .carousel-window { 
     box-sizing: border-box;
     padding: 10px 0; 
@@ -529,7 +537,7 @@ body {
     display: flex;
     justify-content: center; 
     align-items: center;
-    gap: 20px; 
+    gap: 15px; 
     width: max-content; 
     margin: 0 auto; 
   }
