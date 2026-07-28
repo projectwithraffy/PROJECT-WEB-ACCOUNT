@@ -457,24 +457,15 @@ body {
   /* 2. MENAMPILKAN KEMBALI USERNAME & PROFIL */
   .profile-info { 
     display: flex !important; /* LOGIKA BARU: Mengubah dari 'none' menjadi 'flex' agar muncul */
-    justify-content: flex-end; /* Memojokkan profil, username, dan jam ke KANAN atas */
+    justify-content: flex; /* Memojokkan profil, username, dan jam ke KANAN atas */
     align-items: center;
-    gap: 10px; /* Jarak antara foto, username, dan jam */
+    gap: 8px; /* Jarak antara foto, username, dan jam */
     width: 100%;
     margin-bottom: 20px; /* Jarak aman ke area dashboard di bawahnya */
   }
 
   .pc-hint { 
     display: none !important; 
-  } 
-
-  /* 3. TEKS PETUNJUK TETAP DI TENGAH */
-  .mobile-hint { 
-    display: flex !important; 
-    justify-content: center; 
-    align-self: center; /* LOGIKA BARU: Memaksa elemen ini saja yang di tengah */
-    width: 100%;
-    margin-bottom: 15px; 
   } 
 
   .ps-tile { 
@@ -511,7 +502,7 @@ body {
 
   .carousel-window { 
     box-sizing: border-box;
-    padding: 10px 0; 
+    padding: 20px 0; 
     width: 100%; 
     display: flex; 
     justify-content: center; 
