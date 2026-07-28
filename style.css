@@ -428,58 +428,77 @@ body {
 
 /* --- 9. LAYOUT ADAPTIF MOBILE SMARTPHONE (POTRET & LANSKAP) --- */
 .mobile-hint { 
-    display: none; 
+  display: none; 
+} 
+
+@media (max-width: 768px), (max-height: 500px) { 
+  html, body { 
+    width: 100%; 
+    min-height: 100vh; /* Menggunakan min-height agar fleksibel */
+    overflow-x: hidden; /* Mencegah geser kanan-kiri yang rusak */
+    overflow-y: auto; /* Mengizinkan scroll vertikal jika konten panjang */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  } 
+
+  .ps4-system { 
+    box-sizing: border-box;
+    padding: 15px 10px; /* Ditambahkan padding kanan-kiri agar tidak mepet layar */
+    min-height: 100vh; /* Fleksibel mengikuti tinggi layar HP */
+    display: flex;
+    flex-direction: column; /* Menyusun konten ke bawah */
+    justify-content: space-between; /* Memaksimalkan ruang vertikal */
+  } 
+
+  .pc-hint { 
+    display: none !important; 
+  } 
+
+  .mobile-hint { 
+    display: flex !important; 
+  } 
+
+  .profile-info { 
+    display: none !important; 
+  } 
+
+  .ps-tile { 
+    width: 80px; /* Diperkecil sedikit agar pas di layar HP kecil */
+    height: 80px; 
+    pointer-events: none !important; 
+  } 
+
+  .main-dashboard { 
+    position: relative; 
+    width: 100%; 
+    margin-top: 0; /* Reset margin negatif yang berisiko merusak layout */
+  } 
+
+  .nav-arrow { 
+    display: flex !important; 
+    position: absolute; /* Memastikan arrow menempel pada dashboard */
+    top: 50%; 
+    transform: translateY(-50%); /* Menyelaraskan arrow tepat di tengah vertikal */
+  } 
+
+  .left-arrow { 
+    left: 5px; 
+  } 
+
+  .right-arrow { 
+    right: 5px; 
+  } 
+
+  .carousel-window { 
+    box-sizing: border-box;
+    padding: 10px 0; 
+    margin-left: 0; 
+    width: 100%; 
+    display: flex; 
+    justify-content: center; 
+    overflow-x: auto; /* Mengizinkan carousel di-scroll geser kanan-kiri di HP */
+    -webkit-overflow-scrolling: touch; /* Membuat scroll di iPhone lebih halus */
+  } 
 }
 
-@media (max-width: 768px), (max-height: 500px) {
-    html, body {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        touch-action: pan-x;
-    }
-
-    .ps4-system { 
-        padding: 15px 0px; 
-        height: 100vh;
-        max-height: 100%;
-        justify-content: space-around; 
-    } 
-
-    .pc-hint { display: none !important; } 
-    .mobile-hint { display: flex !important; } 
-    .profile-info { display: none !important; } 
-
-    .ps-tile {
-        width: 100px;
-        height: 100px;
-        pointer-events: none !important; /* KUNCI KLIK LANGSUNG PADA GAMBAR */
-    }
-
-    .main-dashboard {
-        position: relative; 
-        width: 100%;
-        margin-top: -10px;
-    }
-    
-    .nav-arrow {
-        display: flex !important; 
-        top: 50%;
-    }
-    
-    .left-arrow { left: 10px; }   
-    .right-arrow { right: 10px; } 
-    
-    .carousel-window {
-        padding: 10px 0; 
-        margin-left: 0;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-    }
-
-    .carousel-track {
-        display: flex;
-        gap: 25px; 
-        width: max-content;
