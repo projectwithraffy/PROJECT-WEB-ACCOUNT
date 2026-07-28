@@ -445,7 +445,7 @@ body {
 
   .ps4-system { 
     box-sizing: border-box;
-    padding: 30px 10px 15px 10px; /* Tambah padding atas (30px) agar link pertama tidak tertutup */
+    padding: 60px 10px 15px 10px; /* Tambah padding atas (30px) agar link pertama tidak tertutup */
     min-height: 100vh; 
     display: flex;
     flex-direction: column; 
@@ -462,10 +462,6 @@ body {
     justify-content: center; 
     width: 100%;
     margin-bottom: 15px; /* Jarak aman ke dashboard di bawahnya */
-  } 
-
-  .profile-info { 
-    display: none !important; 
   } 
 
   .ps-tile { 
