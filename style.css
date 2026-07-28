@@ -1,14 +1,13 @@
-@import url('https://googleapis.com');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&family=Audiowide&display=swap');
 
 /* --- RESET & DASAR --- */
 * { 
     margin: 0; 
     padding: 0; 
     box-sizing: border-box; 
-    font-family: 'Poppins', sans-serif; 
-    user-select: none; 
-    cursor: default; 
 }
+
+html, body { height: 100%; }
 
 body { 
     background-color: #020b18; 
@@ -18,7 +17,11 @@ body {
     align-items: center; 
     overflow: hidden; 
     position: relative; 
+    font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
 }
+
+/* Prevent pointer cursor disabling globally; only restrict selection on UI elements */
+:where(button, a) { cursor: pointer; }
 
 /* --- 1. LAYAR LOADING SCREEN --- */
 .ps4-loader { 
@@ -53,10 +56,10 @@ body {
 
 .load-title { 
     font-family: 'Audiowide', sans-serif; 
-    font-size: 2.8rem; 
-    letter-spacing: 8px; 
-    margin-bottom: 25px; 
-    text-shadow: 0 0 25px rgba(255, 255, 255, 0.2); 
+    font-size: 2.4rem; 
+    letter-spacing: 6px; 
+    margin-bottom: 18px; 
+    text-shadow: 0 0 25px rgba(255, 255, 255, 0.15); 
 }
 
 .glow-bar-load { 
@@ -86,7 +89,7 @@ body {
 
 .load-text { 
     font-size: 0.85rem; 
-    color: rgba(255, 255, 255, 0.4); 
+    color: rgba(255, 255, 255, 0.45); 
     letter-spacing: 1.5px; 
 }
 
@@ -151,7 +154,7 @@ body {
     display: flex; 
     flex-direction: column; 
     justify-content: space-between; 
-    padding: 50px 70px; 
+    padding: 40px 60px; 
 }
 
 /* --- 4. PROFIL USER HEADER --- */
@@ -172,8 +175,8 @@ body {
     position: relative; 
     width: 55px; 
     height: 55px; 
-    background: rgba(255, 255, 255, 0.1); 
-    border: 2px solid rgba(255, 255, 255, 0.4); 
+    background: rgba(255, 255, 255, 0.06); 
+    border: 2px solid rgba(255, 255, 255, 0.28); 
     border-radius: 50%; 
     display: flex; 
     justify-content: center; 
@@ -483,3 +486,18 @@ body {
         display: flex;
         gap: 25px; 
         width: max-content;
+    }
+
+    /* Adjust sizes for small screens */
+    .ps4-system { padding: 12px; }
+    .load-title { font-size: 1.6rem; }
+    .glow-bar-load { width: 150px; }
+}
+
+/* Accessibility helper: allow text selection where useful */
+.content-info, .profile-info, .ps-tile, .loader-content { user-select: text; }
+
+/* Placeholder image helper (replace or remove if real assets exist) */
+.cover-img[src$="placeholder.png"] { opacity: 0.6; filter: grayscale(0.3); }
+
+/* End of file */
