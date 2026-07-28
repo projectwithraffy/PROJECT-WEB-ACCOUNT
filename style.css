@@ -432,7 +432,6 @@ body {
 } 
 
 @media (max-width: 768px), (max-height: 500px) { 
-  /* 1. MEMBUAT LAYAR BISA DI-SCROLL & TIDAK MEMOTONG ATAS/BAWAH */
   html, body { 
     width: 100%; 
     min-height: 100vh; 
@@ -441,18 +440,17 @@ body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    position: relative; /* Mengganti 'fixed' agar konten atas tidak amblas */
+    position: relative;
   } 
 
-  /* 2. MENATA KONTEN UTAMA AGAR SEIMBANG */
   .ps4-system { 
     box-sizing: border-box;
-    padding: 20px 10px; 
+    padding: 30px 10px 15px 10px; /* Tambah padding atas (30px) agar link pertama tidak tertutup */
     min-height: 100vh; 
     display: flex;
     flex-direction: column; 
-    justify-content: center; /* Memastikan semua grup konten berada di tengah vertikal */
-    align-items: center; /* Memastikan konten berada di tengah horizontal */
+    justify-content: flex-start; /* Mulai dari atas agar elemen berurutan rapi */
+    align-items: center; 
   } 
 
   .pc-hint { 
@@ -461,8 +459,9 @@ body {
 
   .mobile-hint { 
     display: flex !important; 
-    justify-content: center; /* Teks/hint otomatis di tengah */
+    justify-content: center; 
     width: 100%;
+    margin-bottom: 15px; /* Jarak aman ke dashboard di bawahnya */
   } 
 
   .profile-info { 
@@ -475,14 +474,12 @@ body {
     pointer-events: none !important; 
   } 
 
-  /* 3. MENGAUR DASHBOARD DI TENGAH */
   .main-dashboard { 
     position: relative; 
     width: 100%; 
-    margin: 0 auto; /* Memaksa box dashboard berada di tengah layar */
+    margin: 0 auto; 
     display: flex;
     justify-content: center;
-    align-items: center;
   } 
 
   .nav-arrow { 
@@ -490,27 +487,40 @@ body {
     position: absolute; 
     top: 50%; 
     transform: translateY(-50%); 
-    z-index: 10; /* Memastikan panah tidak tertimpa gambar */
+    z-index: 10; 
   } 
 
   .left-arrow { 
-    left: 10px; 
+    left: 5px; 
   } 
 
   .right-arrow { 
-    right: 10px; 
+    right: 5px; 
   } 
 
-  /* 4. MEMBUAT ITEM CAROUSEL PAS DI TENGAH LAYAR HP */
+  /* ========================================================
+     PERBAIKAN UTAMA PADA CAROUSEL (WINDOW & TRACK)
+     ======================================================== */
+  
+  /* Jendela luar: Membatasi area pandang dan berpusat di layar */
   .carousel-window { 
     box-sizing: border-box;
     padding: 10px 0; 
     width: 100%; 
     display: flex; 
-    justify-content: center; /* Mengunci item di tengah jika jumlahnya sedikit */
+    justify-content: center; /* Memastikan track berada di tengah */
     align-items: center;
-    gap: 15px; /* Memberi jarak antar item agar rapi */
     overflow-x: auto; 
     -webkit-overflow-scrolling: touch; 
   } 
+
+  /* Jalur dalam: Mengatur posisi item agar berjejer ke samping di tengah */
+  .carousel-track {
+    display: flex;
+    justify-content: center; /* Memaksa item-item di dalamnya rata tengah */
+    align-items: center;
+    gap: 15px; /* Memberikan jarak antar item mobile agar tidak menempel */
+    width: max-content; /* Lebar otomatis mengikuti jumlah item */
+    margin: 0 auto; /* Menjaga posisi track tetap sentral */
+  }
 }
