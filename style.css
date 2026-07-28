@@ -102,6 +102,11 @@ body {
     50% { opacity: 1; } 
 }
 
+/* KELAS BARU: Membuat loader transparan terhadap klik setelah loading selesai */
+.loader-interactive {
+    pointer-events: none;
+}
+
 /* --- 2. LATAR BELAKANG MEWAH STANDAR --- */
 .ps4-wave-bg { 
     position: absolute; 
