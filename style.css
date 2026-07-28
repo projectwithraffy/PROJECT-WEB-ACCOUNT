@@ -443,25 +443,38 @@ body {
     position: relative;
   } 
 
+  /* 1. WADAH UTAMA (Hanya mengatur aliran vertikal global) */
   .ps4-system { 
     box-sizing: border-box;
-    padding: 60px 10px 15px 10px; /* Tambah padding atas (30px) agar link pertama tidak tertutup */
+    padding: 15px 10px; 
     min-height: 100vh; 
     display: flex;
     flex-direction: column; 
-    justify-content: flex-start; /* Mulai dari atas agar elemen berurutan rapi */
-    align-items: center; 
+    justify-content: flex-start; 
+    align-items: stretch; /* LOGIKA BARU: Membiarkan elemen anak mengatur posisinya sendiri */
   } 
+
+  /* 2. MENAMPILKAN KEMBALI USERNAME & PROFIL */
+  .profile-info { 
+    display: flex !important; /* LOGIKA BARU: Mengubah dari 'none' menjadi 'flex' agar muncul */
+    justify-content: flex-end; /* Memojokkan profil, username, dan jam ke KANAN atas */
+    align-items: center;
+    gap: 10px; /* Jarak antara foto, username, dan jam */
+    width: 100%;
+    margin-bottom: 20px; /* Jarak aman ke area dashboard di bawahnya */
+  }
 
   .pc-hint { 
     display: none !important; 
   } 
 
+  /* 3. TEKS PETUNJUK TETAP DI TENGAH */
   .mobile-hint { 
     display: flex !important; 
     justify-content: center; 
+    align-self: center; /* LOGIKA BARU: Memaksa elemen ini saja yang di tengah */
     width: 100%;
-    margin-bottom: 15px; /* Jarak aman ke dashboard di bawahnya */
+    margin-bottom: 15px; 
   } 
 
   .ps-tile { 
@@ -470,12 +483,14 @@ body {
     pointer-events: none !important; 
   } 
 
+  /* 4. AREA DASHBOARD UTAMA TETAP DI TENGAH */
   .main-dashboard { 
     position: relative; 
     width: 100%; 
     margin: 0 auto; 
     display: flex;
     justify-content: center;
+    align-self: center; /* LOGIKA BARU: Memaksa dashboard & carousel tetap di tengah */
   } 
 
   .nav-arrow { 
@@ -494,5 +509,23 @@ body {
     right: 5px; 
   } 
 
-  /* ========================================================
-    
+  .carousel-window { 
+    box-sizing: border-box;
+    padding: 10px 0; 
+    width: 100%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+    overflow-x: auto; 
+    -webkit-overflow-scrolling: touch; 
+  } 
+
+  .carousel-track {
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    gap: 15px; 
+    width: max-content; 
+    margin: 0 auto; 
+  }
+}
