@@ -434,71 +434,64 @@ body {
 @media (max-width: 768px), (max-height: 500px) { 
   html, body { 
     width: 100%; 
-    min-height: 100vh; 
-    overflow-x: hidden; 
-    overflow-y: auto; 
+    height: 100%; /* Mengunci tinggi dasar agar kalkulasi posisi vertikal akurat */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
   } 
 
-  /* 1. WADAH UTAMA: Mengembalikan UI ke tengah vertikal layar */
+  /* 1. KONTEN UTAMA: Fokus menjadi wadah jangkar vertikal */
   .ps4-system { 
     box-sizing: border-box;
     padding: 20px 15px; 
-    min-height: 100vh; 
+    height: 100vh; /* Memaksa tinggi pas satu layar HP penuh */
+    min-height: -webkit-fill-available; /* Perbaikan bug tinggi layar pada Chrome/Safari mobile */
     display: flex;
     flex-direction: column; 
-    justify-content: space-between; /* LOGIKA BARU: Mendorong header ke atas dan dashboard ke tengah/bawah secara seimbang */
+    justify-content: flex-start; /* Aliran dasar dari atas ke bawah */
     align-items: stretch; 
+    position: relative;
   } 
 
-  /* 2. HEADER: Profil di Kiri, Jam di Kanan */
+  /* 2. HEADER: Memisahkan Profil (Kiri) dan Jam (Kanan) secara mandiri */
   .profile-info { 
     display: flex !important; 
-    /* LOGIKA BARU: Mendorong elemen pertama (profil) ke ujung kiri 
-       dan elemen terakhir (jam/lainnya) ke ujung kanan */
     justify-content: space-between; 
     align-items: center;
     width: 100%;
-    margin-bottom: auto; /* Membantu mendorong konten di bawahnya agar tetap turun */
-  }
-
-  /* Jika teks profil dan username Anda berada dalam satu pembungkus di dalam .profile-info */
-  .profile-info .user-box, 
-  .profile-info .avatar-group {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Jarak antara foto profil dan teks username */
+    flex-shrink: 0; /* Mencegah header gepeng atau mengecil */
   }
 
   .pc-hint { 
     display: none !important; 
   } 
 
-  /* 3. TEKS PETUNJUK: Di tengah presisi */
+  /* 3. TEKS PETUNJUK: Berada di atas dashboard sedikit */
   .mobile-hint { 
     display: flex !important; 
     justify-content: center; 
     align-self: center; 
     text-align: center;
     width: 100%;
-    margin-top: 20px;
+    margin-top: auto; /* LOGIKA BARU: Mendorong teks ini ke tengah bawah bersama dashboard */
     margin-bottom: 10px; 
   } 
 
   .ps-tile { 
-    width: 85px; /* Sedikit dinaikkan agar ikon link pertama terlihat lebih proporsional */
+    width: 85px; 
     height: 85px; 
     pointer-events: none !important; 
   } 
 
-  /* 4. AREA DASHBOARD UTAMA: Kembali ke tengah vertikal dan horizontal */
+  /* 4. DASHBOARD UTAMA: Dipaksa menetap di tengah vertikal layar */
   .main-dashboard { 
     position: relative; 
     width: 100%; 
-    margin: auto 0; /* LOGIKA BARU: 'auto' vertikal memaksa dashboard berada tepat di tengah sisa ruang layar */
+    /* LOGIKA UTAMA: 'margin-bottom: auto' berpasangan dengan 'margin-top: auto' pada mobile-hint 
+       akan mengunci dashboard tepat di tengah-tengah sisa ruang vertikal layar */
+    margin-bottom: auto; 
     display: flex;
     justify-content: center;
     align-self: center; 
@@ -520,7 +513,7 @@ body {
     right: 5px; 
   } 
 
-  /* 5. CAROUSEL & TRACK: Memastikan item (termasuk ikon link pertama) di tengah presisi */
+  /* 5. CAROUSEL & TRACK: Menjaga ikon link pertama tetap di tengah horizontal */
   .carousel-window { 
     box-sizing: border-box;
     padding: 10px 0; 
@@ -536,7 +529,7 @@ body {
     display: flex;
     justify-content: center; 
     align-items: center;
-    gap: 20px; /* Jarak antar ikon sedikit dilebarkan agar seimbang */
+    gap: 20px; 
     width: max-content; 
     margin: 0 auto; 
   }
