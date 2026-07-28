@@ -434,7 +434,7 @@ body {
 @media (max-width: 768px), (max-height: 500px) { 
   html, body { 
     width: 100%; 
-    min-height: 100vh; 
+    min-height: 50vh; 
     overflow-x: hidden; 
     overflow-y: auto; 
     margin: 0;
