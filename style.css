@@ -558,7 +558,7 @@ body {
 @media (max-height: 500px) and (orientation: landscape) {
     /* Kurangi padding vertikal secara drastis agar konten muat */
     .ps4-system {
-        padding: 20px 25px;
+        padding: 20px 50px;
         gap: 5px; /* Kurangi jarak antar elemen utama */
     }
 
