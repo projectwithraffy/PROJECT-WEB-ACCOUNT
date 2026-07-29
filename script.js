@@ -149,24 +149,29 @@ document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[
 document.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, { passive: true });
 
 // Tombol "Start"
-startBtn.addEventListener('click', (e) => {
+// FIX: Gunakan 'touchstart' untuk responsivitas mobile yang lebih baik
+startBtn.addEventListener('touchstart', (e) => {
     e.stopPropagation(); // Mencegah event 'click' di document terpicu lagi
     if (isSystemReady) executeLink();
 });
 
 // Tombol Panah Mobile
-arrowLeftBtn.addEventListener('click', (e) => {
+// FIX: Ganti 'click' dengan 'touchstart' untuk mobile
+arrowLeftBtn.addEventListener('touchstart', (e) => {
     e.stopPropagation();
     if (isSystemReady && index > 0) {
         index--;
         updatePS4UI(index);
+        playSound(sndScroll); // Tambahkan efek suara saat panah diklik
     }
 });
 
-arrowRightBtn.addEventListener('click', (e) => {
+// FIX: Ganti 'click' dengan 'touchstart' untuk mobile
+arrowRightBtn.addEventListener('touchstart', (e) => {
     e.stopPropagation();
     if (isSystemReady && index < tiles.length - 1) {
         index++;
         updatePS4UI(index);
+        playSound(sndScroll); // Tambahkan efek suara saat panah diklik
     }
 });
