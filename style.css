@@ -412,7 +412,7 @@ body {
 
 .footer-hints-container {
     display: flex;
-    gap: 20px;
+    gap: 8px;
 }
 
 .hint { 
