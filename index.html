@@ -48,12 +48,8 @@
 
     <!-- Jalur Geser Kotak Sampul Sosmed (GANTI TAUTAN DAN NAMA FILE GAMBAR DI SINI) -->
        <main class="main-dashboard">
-    <!-- TAMBAHKAN DUA BARIS TOMBOL PANAH INI -->
-    <button class="nav-arrow left-arrow" id="arrowLeftBtn"></button>
-    <button class="nav-arrow right-arrow" id="arrowRightBtn"></button>
-
-    <div class="carousel-window">
-        <div class="carousel-track" id="track">
+            <div class="carousel-window" id="carouselWindow">
+                <div class="carousel-track" id="track">
                     <a href="https://sociabuzz.com/raffyyy/support" class="ps-tile active" data-title="Donate & Support" data-desc="Support the creator. Every contribution keeps the project alive." data-img="sociabuzz.png" data-icon="fa-heart"></a>
                     <a href="https://discord.gg/BB3cvSXyHh" class="ps-tile" data-title="Discord RaffyDistrik" data-desc="Join our primary text and voice channels. Chat with the global community." data-img="discord.png" data-icon="fa-discord"></a>
                     <a href="https://discord.gg/RTuqegUFBK" class="ps-tile" data-title="Discord ERYTH" data-desc="Secondary community lounge for events and emergency updates." data-img="discord.png" data-icon="fa-discord"></a>
@@ -62,9 +58,13 @@
                     <a href="https://youtube.com/@raffylive" class="ps-tile" data-title="YouTube Channel" data-desc="Watch high-quality video content, programming guides, and live streams." data-img="youtube.png" data-icon="fa-youtube"></a>
                 </div>
             </div>
-            <!-- FIX: Tambahkan elemen untuk scrollbar kustom di sini -->
-            <div class="custom-scrollbar-container">
-                <div class="custom-scrollbar-thumb" id="scrollbarThumb"></div>
+            <!-- FIX: Wadah baru untuk kontrol navigasi di bawah carousel -->
+            <div class="carousel-controls">
+                <button class="nav-arrow left-arrow" id="arrowLeftBtn"></button>
+                <div class="custom-scrollbar-container">
+                    <div class="custom-scrollbar-thumb" id="scrollbarThumb"></div>
+                </div>
+                <button class="nav-arrow right-arrow" id="arrowRightBtn"></button>
             </div>
         </main>
 
@@ -80,7 +80,7 @@
         <!-- Navigasi Tombol Footer -->
     <footer class="footer-bar">
             <div class="hint pc-hint"><span class="key-icon yellow">Enter</span> Open</div>
-            <div class="hint mobile-hint"><span class="key-icon">Swipe 🡠 🡢</span> Geser Menu</div>
+            <div class="hint mobile-hint"><span class="key-icon">Geser / Scroll</span> Menu</div>
         </footer>
 
     <!-- Tautkan file JavaScript eksternal di sini -->
