@@ -347,6 +347,13 @@ body {
     }
 }
 
+/* FIX: Sembunyikan scrollbar di PC (perangkat dengan mouse) karena sudah ada navigasi geser */
+@media (pointer: fine) {
+    .carousel-controls {
+        display: none;
+    }
+}
+
 /* --- 7. PANEL DESKRIPSI BAWAH --- */
 .content-info { 
     color: #fff; 
