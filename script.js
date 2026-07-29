@@ -79,8 +79,10 @@ setTimeout(() => {
     loader.classList.add('loader-interactive'); 
 }, 2200);
 
-function startSystem() {
+function startSystem(event) {
     if (!isLoadingFinished || isSystemReady) return;
+    // FIX: Hentikan event agar tidak "merambat" dan memicu listener lain (seperti executeLink) secara tidak sengaja.
+    if (event) event.stopPropagation();
     loader.classList.add('fade-out');
     isSystemReady = true;
     playSound(sndStartup);
@@ -133,7 +135,7 @@ function handleSwipe() {
 loader.addEventListener('click', startSystem);
 loader.addEventListener('touchstart', startSystem, { passive: true });
 document.addEventListener('keydown', (e) => { // Keydown tetap di document karena event keyboard tidak terpengaruh oleh lapisan elemen
-    if (isLoadingFinished && !isSystemReady) startSystem();
+    if (isLoadingFinished && !isSystemReady) startSystem(e);
 });
 
 // Navigasi Keyboard
