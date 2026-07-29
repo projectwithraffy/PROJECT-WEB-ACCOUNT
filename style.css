@@ -453,10 +453,10 @@ body {
     .ps4-system { 
         padding: 15px 25px; /* FIX: Tambahkan padding horizontal agar tidak mentok kiri-kanan */
         height: 100vh;
-        width: 100%; /* Pastikan sistem mengisi lebar penuh */
+        width: 100%; 
         max-height: none; /* FIX: Hapus max-height agar tidak konflik */
         justify-content: center; /* FIX: Posisikan seluruh layout di tengah layar secara vertikal */
-        gap: 20px; /* FIX: Beri jarak antar elemen utama (header, main, content, footer) */
+        gap: 15px; /* FIX: Kurangi jarak antar elemen agar lebih rapat */
     } 
 
     .pc-hint { display: none !important; } 
@@ -494,6 +494,12 @@ body {
         justify-content: center;
         width: 100%;
     }
+}
+
+/* FIX: Tambahkan petunjuk geser untuk PC */
+.pc-hint.drag-hint::before {
+    content: 'Drag';
+    margin-right: 5px;
 }
 
 /* --- 10. PENYESUAIAN UKURAN FONT & ELEMEN UNTUK MOBILE --- */
