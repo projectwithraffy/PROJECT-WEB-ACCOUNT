@@ -439,24 +439,6 @@ body {
         margin-top: -10px; /* Posisikan lebih dekat dengan carousel */
     }
 
-    .nav-arrow {
-        display: block; /* Tampilkan panah di mobile */
-        flex-shrink: 0;
-        width: 20px;
-        height: 20px;
-        background: transparent;
-        border: none;
-        border-top: 2px solid rgba(255,255,255,0.5);
-        border-right: 2px solid rgba(255,255,255,0.5);
-        cursor: pointer;
-        transition: border-color 0.2s;
-    }
-    .nav-arrow:active {
-        border-color: #fff;
-    }
-    .left-arrow { transform: rotate(-135deg); }
-    .right-arrow { transform: rotate(45deg); }
-    
     .carousel-window {
         padding: 10px 0; /* Padding bawah tidak lagi diperlukan di sini */
         margin-left: 0;
@@ -467,7 +449,7 @@ body {
 
     /* FIX: Styling untuk scrollbar kustom */
     .custom-scrollbar-container {
-        width: 100%;
+        flex-grow: 1; /* Biarkan scrollbar mengisi ruang yang tersedia */
         height: 4px;
         background: rgba(255, 255, 255, 0.05);
         border-radius: 2px;
@@ -476,14 +458,19 @@ body {
     }
 
     .custom-scrollbar-thumb {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 2px;
-        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Samakan transisi dengan carousel */
+        position: relative; /* Ubah ke relative untuk positioning thumb */
+        width: 20px; /* Lebar awal thumb */
+        height: 20px; /* Tinggi thumb */
+        background: rgba(255, 255, 255, 0.5);
+        border-radius: 50%; /* Jadikan lingkaran */
+        cursor: grab;
+        top: 50%; /* Posisikan di tengah track secara vertikal */
+        transform: translateY(-50%);
+        transition: background 0.2s;
         will-change: width, transform;
+    }
+    .custom-scrollbar-thumb:active {
+        background: #fff;
     }
 
     .carousel-track {
