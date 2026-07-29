@@ -1,4 +1,3 @@
-// --- 1. SELEKSI ELEMEN DOM ---
 const track = document.getElementById('track');
 const tiles = document.querySelectorAll('.ps-tile');
 const gameTitle = document.getElementById('game-title');
@@ -11,12 +10,12 @@ const carouselWindow = document.getElementById('carouselWindow'); // FIX: Seleks
 const clock = document.getElementById('clock');
 const scrollbarThumb = document.getElementById('scrollbarThumb'); // FIX: Seleksi thumb scrollbar
 
-// Seleksi elemen audio
+// AUDIO SETUP
 const sndStartup = document.getElementById('snd-startup');
 const sndScroll = document.getElementById('snd-scroll');
 const sndSelect = document.getElementById('snd-select');
 
-// --- 2. STATE MANAGEMENT ---
+// STATE MANAGEMENT
 let index = 0;
 let isSystemReady = false;
 let isLoadingFinished = false;
@@ -29,7 +28,7 @@ let thumbDragStartX = 0;
 let hasDragged = false; // FIX: State untuk membedakan klik dan drag di PC
 let isAudioUnlocked = false; // FIX: State untuk tracking izin audio
 
-// --- 3. INISIALISASI ---
+// INISIALISASI
 
 // Inisialisasi Konten Gambar Sampul & Ikon Fallback
 tiles.forEach(tile => {
@@ -69,13 +68,9 @@ setInterval(() => {
     clock.textContent = `${timeString} WIB`;
 }, 1000);
 
-// --- 4. FUNGSI UTAMA ---
-
-// FIX: Fungsi untuk "membuka" izin audio di browser mobile
+// FUNGSI UTAMA
 function unlockAudioContext() {
     if (isAudioUnlocked) return;
-    // Metode paling andal: coba putar dan langsung jeda.
-    // Ini "membangunkan" AudioContext di browser mobile.
     const promise = sndScroll.play();
     if (promise !== undefined) {
         promise.then(() => sndScroll.pause()).catch(() => {});
@@ -96,7 +91,6 @@ setTimeout(() => {
 
 function startSystem(event) {
     if (!isLoadingFinished || isSystemReady) return;
-    // FIX: Hentikan event agar tidak "merambat" dan memicu listener lain (seperti executeLink) secara tidak sengaja.
     if (event) event.stopPropagation();
     loader.classList.add('fade-out');
     isSystemReady = true;
@@ -116,7 +110,6 @@ function updatePS4UI(targetIndex) {
 
     const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
     
-    // FIX: Hitung jarak geser secara dinamis untuk mengatasi bug di mode lanskap
     let currentStep;
     if (isTouchDevice) {
         const isLandscape = window.matchMedia("(orientation: landscape)").matches && window.innerHeight <= 500;
@@ -131,13 +124,10 @@ function updatePS4UI(targetIndex) {
     
     if (isSystemReady) playSound(sndScroll);
 
-    // FIX: Logika untuk memperbarui scrollbar kustom
-    // FIX: Jalankan untuk semua perangkat, bukan hanya touch
     const scrollbarContainer = scrollbarThumb.parentElement;
     const maxScrollbarOffset = scrollbarContainer.clientWidth - scrollbarThumb.clientWidth;
     const thumbOffset = (targetIndex / (tiles.length - 1)) * maxScrollbarOffset;
 
-    // Hentikan transisi sementara jika sedang di-drag
     const isAnyDragging = isThumbDragging || isDragging;
     scrollbarThumb.style.transition = isAnyDragging ? 'none' : 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
     scrollbarThumb.style.transform = `translate3d(${thumbOffset}px, -50%, 0)`;
@@ -177,16 +167,13 @@ function handleDrag(endX) {
         updatePS4UI(index);
     }
 }
-// --- 5. EVENT LISTENERS ---
-
-// --- PERBAIKAN: Memasang listener langsung pada loader ---
-// Ini memastikan interaksi pengguna ditangkap bahkan saat loader menutupi layar.
+// EVENT LISTENERS
 loader.addEventListener('click', startSystem);
 loader.addEventListener('touchstart', (e) => {
-    if (!isAudioUnlocked) unlockAudioContext(); // Panggil unlock audio pada interaksi pertama
+    if (!isAudioUnlocked) unlockAudioContext(); 
     startSystem(e);
 }, { passive: true });
-document.addEventListener('keydown', (e) => { // Keydown tetap di document karena event keyboard tidak terpengaruh oleh lapisan elemen
+document.addEventListener('keydown', (e) => { 
     if (isLoadingFinished && !isSystemReady) startSystem(e);
 });
 
@@ -199,22 +186,19 @@ document.addEventListener('keydown', (e) => {
 });
 
 // Navigasi Sentuhan (Swipe)
-// FIX: Batasi listener swipe hanya pada area carousel untuk mencegah konflik
 carouselWindow.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
 carouselWindow.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, { passive: true });
 
 // Tombol "Start"
-// FIX: Gunakan 'touchstart' untuk responsivitas mobile yang lebih baik
 startBtn.addEventListener('touchstart', (e) => {
     e.stopPropagation(); // Mencegah event 'click' di document terpicu lagi
     if (isSystemReady) executeLink();
 });
 
-// FIX: Navigasi Drag-to-Swipe untuk PC
+// Navigasi Drag-to-Swipe untuk PC
 carouselWindow.addEventListener('mousedown', (e) => {
-    // Hanya aktifkan untuk klik kiri mouse
     if (e.button !== 0) return;
-    e.preventDefault(); // Mencegah seleksi teks saat drag
+    e.preventDefault(); 
     isDragging = true;
     hasDragged = false;
     dragStartX = e.pageX;
@@ -223,7 +207,6 @@ carouselWindow.addEventListener('mousedown', (e) => {
 
 carouselWindow.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
-    // Jika mouse bergerak lebih dari beberapa piksel, anggap itu sebagai drag
     if (Math.abs(e.pageX - dragStartX) > 5) {
         hasDragged = true;
     }
@@ -233,31 +216,29 @@ window.addEventListener('mouseup', (e) => {
     if (!isDragging) return;
     isDragging = false;
     carouselWindow.style.cursor = 'grab';
-    // Hanya panggil handleDrag jika pengguna benar-benar menggeser
     if (hasDragged) {
         handleDrag(e.pageX);
     }
 });
 
-// FIX: Mencegah link terbuka jika pengguna melakukan drag
 track.addEventListener('click', (e) => {
     if (hasDragged) {
         e.preventDefault();
     }
 });
  
-// --- FIX: Logika baru untuk menggeser scrollbar thumb (PC & Mobile) ---
+// Scrollbar thumb (PC & Mobile)
 function onThumbDragStart(e) {
     isThumbDragging = true;
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     thumbDragStartX = clientX - scrollbarThumb.getBoundingClientRect().left;
-    scrollbarThumb.style.transition = 'none'; // Matikan transisi saat mulai drag
+    scrollbarThumb.style.transition = 'none';
     scrollbarThumb.style.cursor = 'grabbing';
 }
 
 function onThumbDragMove(e) {
     if (!isThumbDragging) return;
-    e.preventDefault(); // Mencegah seleksi teks
+    e.preventDefault(); 
     
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const scrollbarContainer = scrollbarThumb.parentElement;
@@ -265,11 +246,9 @@ function onThumbDragMove(e) {
     
     let newX = clientX - containerRect.left - thumbDragStartX;
     
-    // Batasi pergerakan thumb di dalam container
     const maxOffset = containerRect.width - scrollbarThumb.clientWidth;
     newX = Math.max(0, Math.min(newX, maxOffset));
     
-    // Tentukan index berdasarkan posisi thumb
     const newIndex = Math.round((newX / maxOffset) * (tiles.length - 1));
     if (newIndex !== index) {
         index = newIndex;
@@ -281,7 +260,7 @@ function onThumbDragEnd() {
     if (!isThumbDragging) return;
     isThumbDragging = false;
     scrollbarThumb.style.cursor = 'grab';
-    updatePS4UI(index); // Panggil lagi untuk memastikan posisi akhir thumb benar dengan transisi
+    updatePS4UI(index); 
 }
 
 // Listener untuk Mobile
@@ -297,4 +276,4 @@ window.addEventListener('mouseup', onThumbDragEnd);
 // FIX: Listener global untuk membuka izin audio pada interaksi pertama
 document.addEventListener('click', () => {
     if (!isAudioUnlocked) unlockAudioContext();
-}, { once: true });
+}, { always: true });
