@@ -456,14 +456,16 @@ body {
         overflow: hidden; /* Cegah scroll yang tidak diinginkan */
         touch-action: none; /* Nonaktifkan semua aksi sentuh default browser (zoom, pan) */
     } 
-
+ 
     .ps4-system { 
-        padding: 20px 25px; /* CONTOH: Tambah padding atas-bawah menjadi 40px agar lebih rapat */
+        padding: 20px 0px; 
+        padding: 15px 25px; /* FIX: Tambahkan padding horizontal agar tidak mentok kiri-kanan */
         height: 100vh;
-        width: 100%; 
+        width: 100%; /* Pastikan sistem mengisi lebar penuh */
         max-height: none; /* FIX: Hapus max-height agar tidak konflik */
-        justify-content: space-between; /* FIX: Posisikan header di atas dan footer di bawah */
-        gap: 10px; /* CONTOH: Sedikit tambah jarak antar konten tengah */
+        justify-content: flex-start; /* FIX: Mulai dari atas, jangan paksa elemen ke bawah */
+        justify-content: center; /* FIX: Posisikan seluruh layout di tengah layar secara vertikal */
+        gap: 20px; /* FIX: Beri jarak antar elemen utama (header, main, content, footer) */
     } 
 
     .pc-hint { display: none !important; } 
