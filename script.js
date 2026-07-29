@@ -26,6 +26,7 @@ let isDragging = false; // FIX: State untuk mouse drag
 let dragStartX = 0;
 let isThumbDragging = false; // FIX: State untuk scrollbar thumb drag
 let thumbDragStartX = 0;
+let hasDragged = false; // FIX: State untuk membedakan klik dan drag di PC
 
 // --- 3. INISIALISASI ---
 
@@ -188,25 +189,40 @@ startBtn.addEventListener('touchstart', (e) => {
 
 // FIX: Navigasi Drag-to-Swipe untuk PC
 carouselWindow.addEventListener('mousedown', (e) => {
+    // Hanya aktifkan untuk klik kiri mouse
+    if (e.button !== 0) return;
+    e.preventDefault(); // Mencegah seleksi teks saat drag
     isDragging = true;
+    hasDragged = false;
     dragStartX = e.pageX;
     carouselWindow.style.cursor = 'grabbing';
 });
 
-carouselWindow.addEventListener('mouseup', (e) => {
+carouselWindow.addEventListener('mousemove', (e) => {
     if (!isDragging) return;
-    isDragging = false;
-    carouselWindow.style.cursor = 'grab';
-    handleDrag(e.pageX);
-});
-
-carouselWindow.addEventListener('mouseleave', () => {
-    if (isDragging) {
-        isDragging = false;
-        carouselWindow.style.cursor = 'grab';
+    // Jika mouse bergerak lebih dari beberapa piksel, anggap itu sebagai drag
+    if (Math.abs(e.pageX - dragStartX) > 5) {
+        hasDragged = true;
     }
 });
 
+window.addEventListener('mouseup', (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    carouselWindow.style.cursor = 'grab';
+    // Hanya panggil handleDrag jika pengguna benar-benar menggeser
+    if (hasDragged) {
+        handleDrag(e.pageX);
+    }
+});
+
+// FIX: Mencegah link terbuka jika pengguna melakukan drag
+track.addEventListener('click', (e) => {
+    if (hasDragged) {
+        e.preventDefault();
+    }
+});
+ 
 // --- FIX: Logika baru untuk menggeser scrollbar thumb di mobile ---
 scrollbarThumb.addEventListener('touchstart', (e) => {
     isThumbDragging = true;
