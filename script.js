@@ -7,6 +7,7 @@ const loader = document.getElementById('loader');
 const loadText = document.getElementById('loadText');
 const startBtn = document.getElementById('startBtn');
 const dustContainer = document.getElementById('dustContainer');
+const carouselWindow = document.getElementById('carouselWindow'); // FIX: Seleksi window carousel
 const clock = document.getElementById('clock');
 const arrowLeftBtn = document.getElementById('arrowLeftBtn');
 const arrowRightBtn = document.getElementById('arrowRightBtn');
@@ -23,6 +24,8 @@ let isSystemReady = false;
 let isLoadingFinished = false;
 let touchStartX = 0;
 let touchEndX = 0;
+let isDragging = false; // FIX: State untuk mouse drag
+let dragStartX = 0;
 
 // --- 3. INISIALISASI ---
 
@@ -141,6 +144,20 @@ function handleSwipe() {
     }
 }
 
+function handleDrag(endX) {
+    const dragThreshold = 50; // Jarak minimum drag agar dianggap swipe
+    if (!isSystemReady) return;
+
+    const dragDistance = dragStartX - endX;
+
+    if (dragDistance > dragThreshold && index < tiles.length - 1) {
+        index++;
+        updatePS4UI(index);
+    } else if (dragDistance < -dragThreshold && index > 0) {
+        index--;
+        updatePS4UI(index);
+    }
+}
 // --- 5. EVENT LISTENERS ---
 
 // --- PERBAIKAN: Memasang listener langsung pada loader ---
@@ -168,4 +185,42 @@ document.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].s
 startBtn.addEventListener('touchstart', (e) => {
     e.stopPropagation(); // Mencegah event 'click' di document terpicu lagi
     if (isSystemReady) executeLink();
+});
+
+// FIX: Event listener untuk tombol panah
+arrowLeftBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (isSystemReady && index > 0) {
+        index--;
+        updatePS4UI(index);
+    }
+});
+
+arrowRightBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (isSystemReady && index < tiles.length - 1) {
+        index++;
+        updatePS4UI(index);
+    }
+});
+
+// FIX: Navigasi Drag-to-Swipe untuk PC
+carouselWindow.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    dragStartX = e.pageX;
+    carouselWindow.style.cursor = 'grabbing';
+});
+
+carouselWindow.addEventListener('mouseup', (e) => {
+    if (!isDragging) return;
+    isDragging = false;
+    carouselWindow.style.cursor = 'grab';
+    handleDrag(e.pageX);
+});
+
+carouselWindow.addEventListener('mouseleave', () => {
+    if (isDragging) {
+        isDragging = false;
+        carouselWindow.style.cursor = 'grab';
+    }
 });
