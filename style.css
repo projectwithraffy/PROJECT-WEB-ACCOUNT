@@ -444,12 +444,13 @@ body {
         height: 100vh;
         width: 100%; /* Pastikan sistem mengisi lebar penuh */
         max-height: none; /* FIX: Hapus max-height agar tidak konflik */
-        justify-content: space-between; /* FIX: Gunakan space-between agar elemen menempel di atas dan bawah */
+        justify-content: flex-start; /* FIX: Mulai dari atas, jangan paksa elemen ke bawah */
+        gap: 20px; /* FIX: Beri jarak antar elemen utama (header, main, content, footer) */
     } 
 
     .pc-hint { display: none !important; } 
-    .mobile-hint { display: flex !important; justify-content: center; width: 100%; } /* FIX: Posisikan hint di tengah */
-    .profile-info { display: none !important; } 
+    .mobile-hint { display: flex !important; } /* FIX: Tampilkan hint mobile */
+    /* .profile-info { display: none !important; } */ /* FIX: Hapus/komentari baris ini untuk menampilkan kembali username */
 
     .ps-tile {
         width: 100px;
@@ -458,7 +459,7 @@ body {
 
     .main-dashboard {
         position: relative; 
-        width: 100%;
+        width: 100%; 
         margin-top: -10px;
     }
     
@@ -475,6 +476,12 @@ body {
         display: flex;
         gap: 25px; 
         width: max-content;
+    }
+
+    /* FIX: Posisikan hint mobile di tengah footer */
+    .footer-bar {
+        justify-content: center;
+        width: 100%;
     }
 }
 
