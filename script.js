@@ -73,15 +73,11 @@ setInterval(() => {
 
 // FIX: Fungsi untuk "membuka" izin audio di browser mobile
 function unlockAudioContext() {
-    if (isAudioUnlocked) return;
-    // Memainkan dan langsung menjeda suara akan meminta izin dari browser
-    sndStartup.play().then(() => sndStartup.pause()).catch(() => {});
-    sndScroll.play().then(() => sndScroll.pause()).catch(() => {});
-    sndSelect.play().then(() => sndSelect.pause()).catch(() => {});
-    isAudioUnlocked = true;
-    // Hapus listener setelah berhasil agar tidak berjalan lagi
-    document.removeEventListener('click', unlockAudioContext);
-    document.removeEventListener('touchstart', unlockAudioContext);
+    // Cukup panggil 'load()' pada semua audio. Ini adalah trik yang seringkali cukup
+    // untuk memberi sinyal ke browser bahwa audio akan digunakan, tanpa memutarnya.
+    sndStartup.load();
+    sndScroll.load();
+    sndSelect.load();
 }
 function playSound(audio) {
     if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
@@ -175,7 +171,7 @@ function handleDrag(endX) {
 // Ini memastikan interaksi pengguna ditangkap bahkan saat loader menutupi layar.
 loader.addEventListener('click', startSystem);
 loader.addEventListener('touchstart', (e) => {
-    unlockAudioContext(); // Panggil unlock audio pada interaksi pertama di mobile
+    if (!isAudioUnlocked) unlockAudioContext(); // Panggil unlock audio pada interaksi pertama
     startSystem(e);
 }, { passive: true });
 document.addEventListener('keydown', (e) => { // Keydown tetap di document karena event keyboard tidak terpengaruh oleh lapisan elemen
@@ -287,4 +283,6 @@ window.addEventListener('mousemove', onThumbDragMove);
 window.addEventListener('mouseup', onThumbDragEnd);
 
 // FIX: Listener global untuk membuka izin audio pada interaksi pertama
-document.addEventListener('click', unlockAudioContext, { once: true });
+document.addEventListener('click', () => {
+    if (!isAudioUnlocked) unlockAudioContext();
+}, { once: true });
