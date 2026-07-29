@@ -300,41 +300,8 @@ body {
 }
 
 /* --- 6. NAV-ARROW LINE CHEVRON MINIMALIS (HP) --- */
-.nav-arrow {
-    display: none;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;       
-    height: 35px;      
-    background: transparent;
-    border: none;
-    outline: none;
-    z-index: 100;
-    cursor: pointer;
-    filter: drop-shadow(0 0 8px rgba(0, 114, 206, 0.8));
-    transition: opacity 0.2s ease, filter 0.2s ease;
-    opacity: 0.6;      
-}
-
-.left-arrow {
-    left: 20px;
-    border-left: 3px solid #ffffff;   
-    border-bottom: 3px solid #ffffff; 
-    transform: translateY(-50%) rotate(45deg); 
-}
-
-.right-arrow {
-    right: 20px;
-    border-right: 3px solid #ffffff;
-    border-top: 3px solid #ffffff;
-    transform: translateY(-50%) rotate(45deg); 
-}
-
-.nav-arrow:active {
-    opacity: 1; 
-    filter: drop-shadow(0 0 15px #0072ce); 
-}
+/* Tombol panah disembunyikan di desktop karena ada navigasi keyboard/drag */
+.nav-arrow { display: none; }
 
 /* --- 7. PANEL DESKRIPSI BAWAH --- */
 .content-info { 
@@ -463,14 +430,39 @@ body {
         margin-top: -10px;
     }
     
-    /* FIX: Sembunyikan tombol panah karena kita akan menggunakan swipe */
-    .nav-arrow { display: none !important; }
+    /* FIX: Tampilkan dan tata letak kontrol navigasi di mobile */
+    .carousel-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+        margin-top: -10px; /* Posisikan lebih dekat dengan carousel */
+    }
+
+    .nav-arrow {
+        display: block; /* Tampilkan panah di mobile */
+        flex-shrink: 0;
+        width: 20px;
+        height: 20px;
+        background: transparent;
+        border: none;
+        border-top: 2px solid rgba(255,255,255,0.5);
+        border-right: 2px solid rgba(255,255,255,0.5);
+        cursor: pointer;
+        transition: border-color 0.2s;
+    }
+    .nav-arrow:active {
+        border-color: #fff;
+    }
+    .left-arrow { transform: rotate(-135deg); }
+    .right-arrow { transform: rotate(45deg); }
     
     .carousel-window {
-        padding: 10px 0 20px 0; /* FIX: Tambahkan padding bawah untuk ruang scrollbar */
+        padding: 10px 0; /* Padding bawah tidak lagi diperlukan di sini */
         margin-left: 0;
         width: 100%; /* FIX: Hapus flexbox dari sini agar tidak mengganggu perhitungan track */
         overflow-x: hidden; /* FIX: Nonaktifkan scroll native untuk mencegah konflik */
+        cursor: grab; /* FIX: Tunjukkan bahwa area ini bisa di-drag */
     }
 
     /* FIX: Styling untuk scrollbar kustom */
@@ -479,7 +471,6 @@ body {
         height: 4px;
         background: rgba(255, 255, 255, 0.05);
         border-radius: 2px;
-        margin-top: -10px; /* Posisikan lebih dekat dengan carousel */
         position: relative;
         overflow: hidden;
     }
