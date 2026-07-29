@@ -111,16 +111,15 @@ function updatePS4UI(targetIndex) {
     if (isSystemReady) playSound(sndScroll);
 
     // FIX: Logika untuk memperbarui scrollbar kustom
-    if (isTouchDevice && scrollbarThumb) {
-        // Posisi thumb sesuai dengan item yang aktif
-        const scrollbarContainer = scrollbarThumb.parentElement;
-        const maxScrollbarOffset = scrollbarContainer.clientWidth - scrollbarThumb.clientWidth;
-        const thumbOffset = (targetIndex / (tiles.length - 1)) * maxScrollbarOffset;
+    // FIX: Jalankan untuk semua perangkat, bukan hanya touch
+    const scrollbarContainer = scrollbarThumb.parentElement;
+    const maxScrollbarOffset = scrollbarContainer.clientWidth - scrollbarThumb.clientWidth;
+    const thumbOffset = (targetIndex / (tiles.length - 1)) * maxScrollbarOffset;
 
-        // Hentikan transisi sementara jika sedang di-drag
-        scrollbarThumb.style.transition = isThumbDragging ? 'none' : 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
-        scrollbarThumb.style.transform = `translate3d(${thumbOffset}px, -50%, 0)`;
-    }
+    // Hentikan transisi sementara jika sedang di-drag
+    const isAnyDragging = isThumbDragging || isDragging;
+    scrollbarThumb.style.transition = isAnyDragging ? 'none' : 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+    scrollbarThumb.style.transform = `translate3d(${thumbOffset}px, -50%, 0)`;
 }
 
 function executeLink() {
@@ -223,35 +222,50 @@ track.addEventListener('click', (e) => {
     }
 });
  
-// --- FIX: Logika baru untuk menggeser scrollbar thumb di mobile ---
-scrollbarThumb.addEventListener('touchstart', (e) => {
+// --- FIX: Logika baru untuk menggeser scrollbar thumb (PC & Mobile) ---
+function onThumbDragStart(e) {
     isThumbDragging = true;
-    thumbDragStartX = e.touches[0].clientX - scrollbarThumb.getBoundingClientRect().left;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    thumbDragStartX = clientX - scrollbarThumb.getBoundingClientRect().left;
     scrollbarThumb.style.transition = 'none'; // Matikan transisi saat mulai drag
-}, { passive: true });
+    scrollbarThumb.style.cursor = 'grabbing';
+}
 
-document.addEventListener('touchmove', (e) => {
+function onThumbDragMove(e) {
     if (!isThumbDragging) return;
-
+    e.preventDefault(); // Mencegah seleksi teks
+    
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const scrollbarContainer = scrollbarThumb.parentElement;
     const containerRect = scrollbarContainer.getBoundingClientRect();
     
-    let newX = e.touches[0].clientX - containerRect.left - thumbDragStartX;
+    let newX = clientX - containerRect.left - thumbDragStartX;
     
     // Batasi pergerakan thumb di dalam container
     const maxOffset = containerRect.width - scrollbarThumb.clientWidth;
     newX = Math.max(0, Math.min(newX, maxOffset));
-
+    
     // Tentukan index berdasarkan posisi thumb
     const newIndex = Math.round((newX / maxOffset) * (tiles.length - 1));
     if (newIndex !== index) {
         index = newIndex;
         updatePS4UI(index);
     }
-}, { passive: true });
+}
 
-document.addEventListener('touchend', () => {
+function onThumbDragEnd() {
     if (!isThumbDragging) return;
     isThumbDragging = false;
+    scrollbarThumb.style.cursor = 'grab';
     updatePS4UI(index); // Panggil lagi untuk memastikan posisi akhir thumb benar dengan transisi
-});
+}
+
+// Listener untuk Mobile
+scrollbarThumb.addEventListener('touchstart', onThumbDragStart, { passive: true });
+document.addEventListener('touchmove', onThumbDragMove, { passive: false });
+document.addEventListener('touchend', onThumbDragEnd);
+
+// Listener untuk PC
+scrollbarThumb.addEventListener('mousedown', onThumbDragStart);
+window.addEventListener('mousemove', onThumbDragMove);
+window.addEventListener('mouseup', onThumbDragEnd);
