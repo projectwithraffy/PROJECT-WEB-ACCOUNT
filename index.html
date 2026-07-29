@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-       <!-- --- GANTI BLOK LAYAR LOADING LAMA ANDA DENGAN STRUKTUR BERSIH INI --- -->
 <div class="ps4-loader" id="loader">
     <div class="loader-content">
         <h1 class="load-title">LOADING</h1>
@@ -17,19 +16,15 @@
     </div>
 </div>
 
-
-    <!-- Papan Suara Konsole (Soundboard) -->
+    <!-- Soundboard -->
     <audio id="snd-startup" src="startup.mp3" preload="auto"></audio>
     <audio id="snd-scroll" src="scroll.mp3" preload="auto"></audio>
     <audio id="snd-select" src="select.mp3" preload="auto"></audio>
 
-    <!-- Komponen Latar Belakang Ombak & Debu -->
+    <!-- PARTIKEL -->
     <div class="ps4-wave-bg"></div>
     <div class="dust-particles" id="dustContainer"></div>
-
     <div class="ps4-system">
-        <!-- Header Kartu Identitas Pengguna -->
-        <!-- --- CARI BAGIAN INI DI HTML ANDA DAN PASTIKAN SAMA BERSIHNYA --- -->
          
 <header class="profile-header">
     <div class="profile-card">
@@ -37,7 +32,7 @@
             <img src="profil.gif" alt="Profile GIF" class="avatar-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
             <i class="fa-solid fa-user fallback-user" style="display:none;"></i>
             <div class="online-indicator"></div>
-        </div>
+        </div>   
         <div class="profile-info">
             <h2 class="username">@raffy</h2>
             <span class="status-text">Online</span>
@@ -46,7 +41,7 @@
     <div class="time-display" id="clock">--:--</div>
 </header>
 
-    <!-- Jalur Geser Kotak Sampul Sosmed (GANTI TAUTAN DAN NAMA FILE GAMBAR DI SINI) -->
+    <!-- LINK -->
        <main class="main-dashboard">
             <div class="carousel-window" id="carouselWindow">
                 <div class="carousel-track" id="track">
@@ -58,15 +53,14 @@
                     <a href="https://youtube.com/@raffylive" class="ps-tile" data-title="YouTube Channel" data-desc="Watch high-quality video content, programming guides, and live streams." data-img="youtube.png" data-icon="fa-youtube"></a>
                 </div>
             </div>
-            <!-- FIX: Wadah baru untuk kontrol navigasi di bawah carousel -->
-            <div class="carousel-controls">
+
+           <div class="carousel-controls">
                 <div class="custom-scrollbar-container">
                     <div class="custom-scrollbar-thumb" id="scrollbarThumb"></div>
                 </div>
             </div>
         </main>
 
-        <!-- Footer Informasi Aplikasi Aktif -->
         <section class="content-info">
             <h1 id="game-title">DONATE & SUPPORT</h1>
             <div class="action-btn-container">
@@ -75,7 +69,7 @@
             <p id="game-desc">Support the creator. Every contribution keeps the project alive.</p>
         </section>
 
-        <!-- Navigasi Tombol Footer -->
+        <!-- FOOTER -->
     <footer class="footer-bar">
             <div class="footer-hints-container">
                 <div class="hint pc-hint"><span class="key-icon nav-icon"></span> Swipe</div>
@@ -88,7 +82,7 @@
             </div>
         </footer>
 
-    <!-- Tautkan file JavaScript eksternal di sini -->
+    <!-- JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
