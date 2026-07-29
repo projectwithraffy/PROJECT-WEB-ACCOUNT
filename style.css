@@ -403,10 +403,16 @@ body {
 
 /* --- 8. FOOTER BUTTON HINTS --- */
 .footer-bar { 
-    display: flex; 
-    gap: 30px; 
+    display: flex;
+    justify-content: space-between; /* Mendorong hint ke kiri dan kredit ke kanan */
+    align-items: center;
     border-top: 1px solid rgba(255, 255, 255, 0.08); 
     padding-top: 15px; 
+}
+
+.footer-hints-container {
+    display: flex;
+    gap: 30px;
 }
 
 .hint { 
@@ -446,7 +452,7 @@ body {
 
 /* FIX: Styling untuk teks kredit di footer */
 .credit-text {
-    margin-left: auto; /* Mendorong elemen ini ke paling kanan */
+    /* margin-left: auto; tidak lagi diperlukan */
     color: rgba(255, 255, 255, 0.4);
     font-size: 0.85rem;
     display: flex;
@@ -519,8 +525,7 @@ body {
 
     /* FIX: Posisikan hint mobile di tengah footer */
     .footer-bar {
-        justify-content: center;
-        width: 100%;
+        /* Aturan ini tidak lagi diperlukan, dihapus untuk konsistensi */
     }
 }
 
