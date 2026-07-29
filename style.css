@@ -303,6 +303,50 @@ body {
 /* Tombol panah disembunyikan di desktop karena ada navigasi keyboard/drag */
 .nav-arrow { display: none; }
 
+/* --- FIX: KONTROL NAVIGASI CAROUSEL (SCROLLBAR) --- */
+.carousel-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: 10px; /* Beri jarak dari carousel */
+}
+
+.custom-scrollbar-container {
+    flex-grow: 1;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+    position: relative;
+    overflow: visible; /* Izinkan thumb keluar dari batas */
+    cursor: pointer;
+}
+
+.custom-scrollbar-thumb {
+    position: absolute; /* Gunakan absolute untuk positioning */
+    width: 20px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    cursor: grab;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: background 0.2s;
+    will-change: transform;
+}
+
+.custom-scrollbar-thumb:active {
+    background: #fff;
+    cursor: grabbing;
+}
+
+/* Sembunyikan di mobile karena sudah ada kontrol sentuh langsung */
+@media (pointer: coarse) {
+    .carousel-controls {
+        display: none;
+    }
+}
+
 /* --- 7. PANEL DESKRIPSI BAWAH --- */
 .content-info { 
     color: #fff; 
@@ -430,47 +474,12 @@ body {
         margin-top: -10px;
     }
     
-    /* FIX: Tampilkan dan tata letak kontrol navigasi di mobile */
-    .carousel-controls {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        width: 100%;
-        margin-top: -10px; /* Posisikan lebih dekat dengan carousel */
-    }
-
     .carousel-window {
         padding: 10px 0; /* Padding bawah tidak lagi diperlukan di sini */
         margin-left: 0;
         width: 100%; /* FIX: Hapus flexbox dari sini agar tidak mengganggu perhitungan track */
         overflow-x: hidden; /* FIX: Nonaktifkan scroll native untuk mencegah konflik */
         cursor: grab; /* FIX: Tunjukkan bahwa area ini bisa di-drag */
-    }
-
-    /* FIX: Styling untuk scrollbar kustom */
-    .custom-scrollbar-container {
-        flex-grow: 1; /* Biarkan scrollbar mengisi ruang yang tersedia */
-        height: 4px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 2px;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .custom-scrollbar-thumb {
-        position: relative; /* Ubah ke relative untuk positioning thumb */
-        width: 20px; /* Lebar awal thumb */
-        height: 20px; /* Tinggi thumb */
-        background: rgba(255, 255, 255, 0.5);
-        border-radius: 50%; /* Jadikan lingkaran */
-        cursor: grab;
-        top: 50%; /* Posisikan di tengah track secara vertikal */
-        transform: translateY(-50%);
-        transition: background 0.2s;
-        will-change: width, transform;
-    }
-    .custom-scrollbar-thumb:active {
-        background: #fff;
     }
 
     .carousel-track {
