@@ -154,24 +154,3 @@ startBtn.addEventListener('touchstart', (e) => {
     e.stopPropagation(); // Mencegah event 'click' di document terpicu lagi
     if (isSystemReady) executeLink();
 });
-
-// Tombol Panah Mobile
-// FIX: Ganti 'click' dengan 'touchstart' untuk mobile
-arrowLeftBtn.addEventListener('touchstart', (e) => {
-    e.stopPropagation();
-    if (isSystemReady && index > 0) {
-        index--;
-        updatePS4UI(index);
-        playSound(sndScroll); // Tambahkan efek suara saat panah diklik
-    }
-});
-
-// FIX: Ganti 'click' dengan 'touchstart' untuk mobile
-arrowRightBtn.addEventListener('touchstart', (e) => {
-    e.stopPropagation();
-    if (isSystemReady && index < tiles.length - 1) {
-        index++;
-        updatePS4UI(index);
-        playSound(sndScroll); // Tambahkan efek suara saat panah diklik
-    }
-});
