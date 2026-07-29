@@ -1,513 +1,172 @@
-@import url('https://googleapis.com');
+// --- 1. SELEKSI ELEMEN DOM ---
+const track = document.getElementById('track');
+const tiles = document.querySelectorAll('.ps-tile');
+const gameTitle = document.getElementById('game-title');
+const gameDesc = document.getElementById('game-desc');
+const loader = document.getElementById('loader');
+const loadText = document.getElementById('loadText');
+const startBtn = document.getElementById('startBtn');
+const dustContainer = document.getElementById('dustContainer');
+const clock = document.getElementById('clock');
+const arrowLeftBtn = document.getElementById('arrowLeftBtn');
+const arrowRightBtn = document.getElementById('arrowRightBtn');
 
-/* --- RESET & DASAR --- */
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-    font-family: 'Poppins', sans-serif; 
-    user-select: none; 
-    cursor: default; 
-}
+// Seleksi elemen audio
+const sndStartup = document.getElementById('snd-startup');
+const sndScroll = document.getElementById('snd-scroll');
+const sndSelect = document.getElementById('snd-select');
 
-body { 
-    background-color: #020b18; 
-    height: 100vh; /* FIX: Gunakan height, bukan min-height, agar centering selalu akurat */
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    overflow: hidden; 
-    position: relative; 
-}
+// --- 2. STATE MANAGEMENT ---
+let index = 0;
+let isSystemReady = false;
+let isLoadingFinished = false;
+let touchStartX = 0;
+let touchEndX = 0;
 
-/* --- 1. LAYAR LOADING SCREEN --- */
-.ps4-loader { 
-    position: fixed; 
-    top: 0; 
-    left: 0; 
-    width: 100vw; 
-    height: 100vh; 
-    background: #010815; 
-    z-index: 999; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    transition: opacity 0.8s ease, visibility 0.8s; 
-}
+// --- 3. INISIALISASI ---
 
-.ps4-loader.fade-out { 
-    opacity: 0; 
-    visibility: hidden; 
-}
-
-.loader-content { 
-    text-align: center; 
-    color: #fff; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: auto;
-    transform: translateY(-20px);
-}
-
-.load-title { 
-    font-family: 'Audiowide', sans-serif; 
-    font-size: 2.8rem; 
-    letter-spacing: 8px; 
-    margin-bottom: 25px; 
-    text-shadow: 0 0 25px rgba(255, 255, 255, 0.2); 
-}
-
-.glow-bar-load { 
-    width: 220px; 
-    height: 2px; 
-    background: rgba(255,255,255,0.05); 
-    margin: 0 auto 20px; 
-    position: relative; 
-    overflow: hidden; 
-}
-
-.glow-bar-load::after { 
-    content: ''; 
-    position: absolute; 
-    left: -100%; 
-    width: 40%; 
-    height: 100%; 
-    background: #0072ce; 
-    box-shadow: 0 0 8px #0072ce; 
-    animation: barFill 1.3s infinite linear; 
-}
-
-@keyframes barFill { 
-    0% { left: -40%; } 
-    100% { left: 100%; } 
-}
-
-.load-text { 
-    font-size: 0.85rem; 
-    color: rgba(255, 255, 255, 0.4); 
-    letter-spacing: 1.5px; 
-}
-
-.blink-text { 
-    color: #0072ce !important; 
-    font-weight: 500; 
-    text-shadow: 0 0 15px rgba(0, 114, 206, 0.7); 
-    animation: textBlink 1.5s infinite ease-in-out; 
-}
-
-@keyframes textBlink { 
-    0%, 100% { opacity: 0.4; } 
-    50% { opacity: 1; } 
-}
-
-/* KELAS BARU: Membuat loader transparan terhadap klik setelah loading selesai */
-.loader-interactive {
-    pointer-events: none;
-}
-
-/* --- 2. LATAR BELAKANG MEWAH STANDAR --- */
-.ps4-wave-bg { 
-    position: absolute; 
-    width: 100%; 
-    height: 100%; 
-    top: 0; 
-    left: 0; 
-    background: radial-gradient(circle at 30% 30%, #052254 0%, #02112d 60%, #010610 100%); 
-    opacity: 1; 
-    z-index: 1; 
-    overflow: hidden;
-}
-
-.dust-particles { 
-    position: absolute; 
-    width: 100%; 
-    height: 100%; 
-    z-index: 2; 
-    top: 0; 
-    left: 0; 
-    pointer-events: none; 
-}
-
-.dust { 
-    position: absolute; 
-    background: rgba(255, 255, 255, 0.12); 
-    border-radius: 50%; 
-    filter: blur(1px); 
-    animation: floatDust 15s infinite linear; 
-    will-change: transform; 
-}
-
-@keyframes floatDust { 
-    0% { transform: translate3d(0, 150px, 0); opacity: 0; } 
-    30% { opacity: 0.6; } 
-    100% { transform: translate3d(80px, -450px, 0) scale(0.7); opacity: 0; } 
-}
-
-/* --- 3. STRUKTUR UTAMA --- */
-.ps4-system { 
-    position: relative; 
-    z-index: 3; 
-    width: 100vw; 
-    height: 100vh; 
-    max-width: 1280px; 
-    max-height: 720px; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: space-between; 
-    padding: 50px 70px; 
-}
-
-/* --- 4. PROFIL USER HEADER --- */
-.profile-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-}
-
-.profile-card { 
-    display: flex; 
-    align-items: center; 
-    gap: 16px; 
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); 
-}
-
-.avatar-box { 
-    position: relative; 
-    width: 55px; 
-    height: 55px; 
-    background: rgba(255, 255, 255, 0.1); 
-    border: 2px solid rgba(255, 255, 255, 0.4); 
-    border-radius: 50%; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    color: #fff; 
-    font-size: 1.3rem; 
-    overflow: hidden; 
-}
-
-.avatar-img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    border-radius: 50%; 
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-}
-
-.online-indicator { 
-    position: absolute; 
-    bottom: 2px; 
-    right: 2px; 
-    width: 12px; 
-    height: 12px; 
-    background: #2ed573; 
-    border: 2px solid #020b18; 
-    border-radius: 50%; 
-    box-shadow: 0 0 8px #2ed573; 
-    z-index: 3; 
-}
-
-.profile-info .username { 
-    font-size: 1.15rem; 
-    color: #ffffff; 
-    font-weight: 500; 
-    letter-spacing: 0.5px; 
-}
-
-.profile-info .status-text { 
-    font-size: 0.8rem; 
-    color: #2ed573; 
-}
-
-.time-display { 
-    color: rgba(255, 255, 255, 0.6); 
-    font-size: 0.95rem; 
-}
-
-/* --- 5. CAROUSEL MENU UTAMA --- */
-.main-dashboard { 
-    margin-top: -30px; 
-    width: 100%; 
-}
-
-.carousel-window { 
-    width: 100%; 
-    overflow: hidden; 
-    padding: 30px 40px 30px 10px; 
-    margin-left: -10px; 
-}
-
-.carousel-track { 
-    display: flex; 
-    gap: 25px; 
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
-    will-change: transform; 
-    width: max-content; 
-}
-
-/* Kotak Ubin Menu */
-.ps-tile { 
-    width: 140px; 
-    height: 140px; 
-    background: rgba(255, 255, 255, 0.04); 
-    border: 2px solid rgba(255, 255, 255, 0.1); 
-    border-radius: 4px; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    text-decoration: none; 
-    overflow: hidden; 
-    transition: all 0.3s ease; 
-}
-
-.tile-art { 
-    width: 100%; 
-    height: 100%; 
-    position: relative; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    pointer-events: none; 
-}
-
-.cover-img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
-    position: absolute; 
-    top: 0; 
-    left: 0; 
-    z-index: 1; 
-    transition: transform 0.3s ease; 
-}
-
-.fallback-icon { 
-    font-size: 2.8rem; 
-    color: rgba(255, 255, 255, 0.6); 
-    position: relative; 
-    z-index: 2; 
-}
-
-/* EFFECT GLOW SELEKSI AKTIF */
-.ps-tile.active { 
-    border-color: #ffffff; 
-    background: rgba(255, 255, 255, 0.12); 
-    transform: scale(1.08); 
-    box-shadow: 0 0 30px rgba(0, 114, 206, 0.6); 
-}
-
-.ps-tile.active .cover-img { 
-    transform: scale(1.05); 
-}
-
-/* --- 6. NAV-ARROW LINE CHEVRON MINIMALIS (HP) --- */
-.nav-arrow {
-    display: none;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;       
-    height: 35px;      
-    background: transparent;
-    border: none;
-    outline: none;
-    z-index: 100;
-    cursor: pointer;
-    filter: drop-shadow(0 0 8px rgba(0, 114, 206, 0.8));
-    transition: opacity 0.2s ease, filter 0.2s ease;
-    opacity: 0.6;      
-}
-
-.left-arrow {
-    left: 20px;
-    border-left: 3px solid #ffffff;   
-    border-bottom: 3px solid #ffffff; 
-    transform: translateY(-50%) rotate(45deg); 
-}
-
-.right-arrow {
-    right: 20px;
-    border-right: 3px solid #ffffff;
-    border-top: 3px solid #ffffff;
-    transform: translateY(-50%) rotate(45deg); 
-}
-
-.nav-arrow:active {
-    opacity: 1; 
-    filter: drop-shadow(0 0 15px #0072ce); 
-}
-
-/* --- 7. PANEL DESKRIPSI BAWAH --- */
-.content-info { 
-    color: #fff; 
-    min-height: 140px; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 8px; 
-}
-
-.content-info h1 { 
-    font-family: 'Audiowide', sans-serif; 
-    font-size: 1.9rem; 
-    letter-spacing: 1.5px; 
-}
-
-.action-btn-container { 
-    display: flex; 
-    align-items: center; 
-    gap: 15px; 
-}
-
-.start-btn { 
-    background: #fff; 
-    color: #010815; 
-    padding: 6px 38px; 
-    font-weight: 500; 
-    border-radius: 2px; 
-    font-size: 0.9rem; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
-    border: none; 
-    outline: none; 
-    cursor: pointer; 
-    transition: background 0.2s; 
-}
-
-.start-btn:active { 
-    background: #0072ce; 
-    color: #fff; 
-}
-
-#game-desc { 
-    font-size: 0.9rem; 
-    color: rgba(255, 255, 255, 0.6); 
-    max-width: 650px; 
-    line-height: 1.6; 
-}
-
-/* --- 8. FOOTER BUTTON HINTS --- */
-.footer-bar { 
-    display: flex; 
-    gap: 30px; 
-    border-top: 1px solid rgba(255, 255, 255, 0.08); 
-    padding-top: 15px; 
-}
-
-.hint { 
-    display: flex; 
-    align-items: center; 
-    gap: 10px; 
-    font-size: 0.85rem; 
-    color: rgba(255, 255, 255, 0.4); 
-    letter-spacing: 0.5px;
-}
-
-.key-icon { 
-    background: #111923; 
-    padding: 3px 12px; 
-    border-radius: 4px; 
-    border: 1px solid rgba(255, 255, 255, 0.15); 
-    color: #fff; 
-    font-size: 0.75rem; 
-    font-weight: 500;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 24px;
-}
-
-.key-icon.yellow { 
-    color: #f1c40f; 
-    font-weight: bold; 
-}
-
-.nav-icon::before {
-    content: "\2194"; 
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 0.85rem;
-    font-weight: bold;
-}
-
-/* --- 9. LAYOUT ADAPTIF MOBILE SMARTPHONE (POTRET & LANSKAP) --- */
-.mobile-hint { 
-    display: none; 
-}
-
-@media (max-width: 768px), (max-height: 500px) {
-    html, body {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        touch-action: pan-x;
-    }
-    /* FIX: Menyederhanakan aturan untuk mencegah masalah rendering "zoom" */
-    body {
-        touch-action: pan-y; /* Izinkan scroll vertikal jika perlu, cegah zoom aneh */
-    } 
-
-    .ps4-system { 
-        padding: 15px 0px; 
-        height: 100vh;
-        max-height: none; /* FIX: Hapus max-height agar tidak konflik */
-        justify-content: space-between; /* FIX: Gunakan space-between agar elemen menempel di atas dan bawah */
-    } 
-
-    .pc-hint { display: none !important; } 
-    .mobile-hint { display: flex !important; justify-content: center; width: 100%; } /* FIX: Posisikan hint di tengah */
-    .profile-info { display: none !important; } 
-
-    .ps-tile {
-        width: 100px;
-        height: 100px;
-        pointer-events: none !important; /* KUNCI KLIK LANGSUNG PADA GAMBAR */
-    }
-
-    .main-dashboard {
-        position: relative; 
-        width: 100%;
-        margin-top: -10px;
-    }
+// Inisialisasi Konten Gambar Sampul & Ikon Fallback
+tiles.forEach(tile => {
+    const imgUrl = tile.getAttribute('data-img');
+    const iconClass = tile.getAttribute('data-icon');
     
-    .nav-arrow {
-        display: flex !important; 
-        top: 50%;
+    tile.innerHTML = `
+        <div class="tile-art">
+            <img src="${imgUrl}" class="cover-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <i class="fallback-icon" style="display:none;"></i>
+        </div>`;
+        
+    const iconElement = tile.querySelector('.fallback-icon');
+    if (iconClass === 'fa-heart') {
+        iconElement.classList.add('fa-solid', 'fa-heart');
+    } else {
+        iconElement.classList.add('fa-brands', iconClass);
     }
-    
-    .left-arrow { left: 10px; }   
-    .right-arrow { right: 10px; } 
-    
-    .carousel-window {
-        padding: 10px 0; 
-        margin-left: 0;
-        width: 100%; /* FIX: Hapus flexbox dari sini agar tidak mengganggu perhitungan track */
-    }
+});
 
-    .carousel-track {
-        display: flex;
-        gap: 25px; 
-        width: max-content;
+// Inisialisasi Partikel Debu
+for (let i = 0; i < 15; i++) {
+    const dust = document.createElement('div');
+    dust.className = 'dust';
+    dust.style.width = dust.style.height = `${Math.floor(Math.random() * 5) + 3}px`;
+    dust.style.left = `${Math.random() * 100}%`;
+    dust.style.top = `${Math.random() * 50 + 50}%`;
+    dust.style.animationDuration = `${Math.random() * 10 + 12}s`;
+    dust.style.animationDelay = `${Math.random() * 6}s`;
+    dustContainer.appendChild(dust);
+}
+
+// Inisialisasi Jam Digital
+setInterval(() => {
+    const now = new Date();
+    const timeString = now.toTimeString().substring(0, 5);
+    clock.textContent = `${timeString} WIB`;
+}, 1000);
+
+// --- 4. FUNGSI UTAMA ---
+
+function playSound(audio) {
+    if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+}
+
+// Fungsi ini dipanggil setelah 2.2 detik
+setTimeout(() => {
+    document.getElementById('loadBar').style.display = 'none';
+    loadText.textContent = "PRESS ANY KEY OR CLICK TO START";
+    loadText.classList.add('blink-text');
+    isLoadingFinished = true;
+    // FIX: Membuat loader bisa "ditembus" oleh klik/sentuhan
+    loader.classList.add('loader-interactive'); 
+}, 2200);
+
+function startSystem() {
+    if (!isLoadingFinished || isSystemReady) return;
+    loader.classList.add('fade-out');
+    isSystemReady = true;
+    playSound(sndStartup);
+    setTimeout(() => loader.remove(), 800);
+}
+
+function updatePS4UI(targetIndex) {
+    tiles.forEach((tile, i) => {
+        const active = i === targetIndex;
+        tile.classList.toggle('active', active);
+        if (active) {
+            gameTitle.textContent = tile.getAttribute('data-title').toUpperCase();
+            gameDesc.textContent = tile.getAttribute('data-desc');
+        }
+    });
+
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+    const currentStep = isTouchDevice ? 125 : 165; // 100px (lebar tile) + 25px (gap)
+    
+    const offset = -(targetIndex * currentStep);
+    track.style.transform = `translate3d(${offset}px, 0, 0)`;
+    
+    if (isSystemReady) playSound(sndScroll);
+}
+
+function executeLink() {
+    playSound(sndSelect);
+    setTimeout(() => window.open(tiles[index].href, '_blank'), 250);
+}
+
+function handleSwipe() {
+    const swipeThreshold = 40;
+    if (!isSystemReady) return;
+
+    const swipeDistance = touchStartX - touchEndX;
+
+    if (swipeDistance > swipeThreshold && index < tiles.length - 1) {
+        index++;
+        updatePS4UI(index);
+    } else if (swipeDistance < -swipeThreshold && index > 0) {
+        index--;
+        updatePS4UI(index);
     }
 }
 
-/* --- 10. PENYESUAIAN UKURAN FONT & ELEMEN UNTUK MOBILE --- */
-@media (max-width: 768px) {
-    /* Mengurangi ukuran font judul di layar loading */
-    .load-title {
-        font-size: 2rem;
-        letter-spacing: 6px;
-    }
+// --- 5. EVENT LISTENERS ---
 
-    /* Mengurangi ukuran font judul utama dan deskripsi */
-    .content-info h1 {
-        font-size: 1.5rem; /* Lebih kecil dari 1.9rem */
+// --- PERBAIKAN: Memasang listener langsung pada loader ---
+// Ini memastikan interaksi pengguna ditangkap bahkan saat loader menutupi layar.
+loader.addEventListener('click', startSystem);
+loader.addEventListener('touchstart', startSystem, { passive: true });
+document.addEventListener('keydown', (e) => { // Keydown tetap di document karena event keyboard tidak terpengaruh oleh lapisan elemen
+    if (isLoadingFinished && !isSystemReady) startSystem();
+});
+
+// Navigasi Keyboard
+document.addEventListener('keydown', (e) => {
+    if (!isSystemReady) return;
+    if (e.key === 'ArrowRight' && index < tiles.length - 1) { e.preventDefault(); index++; updatePS4UI(index); }
+    else if (e.key === 'ArrowLeft' && index > 0) { e.preventDefault(); index--; updatePS4UI(index); }
+    else if (e.key === 'Enter') { e.preventDefault(); executeLink(); }
+});
+
+// Navigasi Sentuhan (Swipe)
+document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+document.addEventListener('touchend', (e) => { touchEndX = e.changedTouches[0].screenX; handleSwipe(); }, { passive: true });
+
+// Tombol "Start"
+startBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // Mencegah event 'click' di document terpicu lagi
+    if (isSystemReady) executeLink();
+});
+
+// Tombol Panah Mobile
+arrowLeftBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (isSystemReady && index > 0) {
+        index--;
+        updatePS4UI(index);
     }
-    #game-desc {
-        font-size: 0.85rem; /* Sedikit lebih kecil */
-        line-height: 1.5;
-        max-width: 90%; /* Batasi lebar agar tidak terlalu mepet ke tepi */
+});
+
+arrowRightBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (isSystemReady && index < tiles.length - 1) {
+        index++;
+        updatePS4UI(index);
     }
-}
+});
