@@ -553,3 +553,42 @@ body {
         max-width: 90%; /* Batasi lebar agar tidak terlalu mepet ke tepi */
     }
 }
+
+/* --- 11. PENYESUAIAN KHUSUS UNTUK LANDSCAPE MOBILE --- */
+@media (max-height: 500px) and (orientation: landscape) {
+    /* Kurangi padding vertikal secara drastis agar konten muat */
+    .ps4-system {
+        padding: 20px 25px;
+        gap: 5px; /* Kurangi jarak antar elemen utama */
+    }
+
+    /* Perkecil ukuran avatar dan info profil */
+    .avatar-box {
+        width: 45px;
+        height: 45px;
+    }
+    .profile-info .username {
+        font-size: 1rem;
+    }
+
+    /* Perkecil ukuran tile carousel */
+    .ps-tile {
+        width: 90px;
+        height: 90px;
+    }
+
+    /* Buat panel deskripsi lebih ringkas */
+    .content-info {
+        min-height: 0; /* Hapus tinggi minimum */
+        gap: 5px;
+    }
+    .content-info h1 {
+        font-size: 1.3rem;
+    }
+    #game-desc {
+        font-size: 0.75rem;
+        line-height: 1.4;
+        /* Sembunyikan deskripsi jika terlalu ramai, bisa diaktifkan jika perlu */
+        /* display: none; */ 
+    }
+}
