@@ -10,6 +10,7 @@ const dustContainer = document.getElementById('dustContainer');
 const clock = document.getElementById('clock');
 const arrowLeftBtn = document.getElementById('arrowLeftBtn');
 const arrowRightBtn = document.getElementById('arrowRightBtn');
+const scrollbarThumb = document.getElementById('scrollbarThumb'); // FIX: Seleksi thumb scrollbar
 
 // Seleksi elemen audio
 const sndStartup = document.getElementById('snd-startup');
@@ -100,10 +101,24 @@ function updatePS4UI(targetIndex) {
     const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
     const currentStep = isTouchDevice ? 125 : 165; // 100px (lebar tile) + 25px (gap)
     
-    const offset = -(targetIndex * currentStep);
-    track.style.transform = `translate3d(${offset}px, 0, 0)`;
+    const trackOffset = -(targetIndex * currentStep);
+    track.style.transform = `translate3d(${trackOffset}px, 0, 0)`;
     
     if (isSystemReady) playSound(sndScroll);
+
+    // FIX: Logika untuk memperbarui scrollbar kustom
+    if (isTouchDevice && scrollbarThumb) {
+        const trackWidth = track.scrollWidth;
+        const windowWidth = track.parentElement.clientWidth;
+        
+        // Lebar thumb proporsional dengan konten yang terlihat
+        const thumbWidth = (windowWidth / trackWidth) * 100;
+        scrollbarThumb.style.width = `${thumbWidth}%`;
+
+        // Posisi thumb sesuai dengan posisi carousel
+        const thumbOffset = (Math.abs(trackOffset) / trackWidth) * 100;
+        scrollbarThumb.style.transform = `translateX(${thumbOffset}%)`;
+    }
 }
 
 function executeLink() {
