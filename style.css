@@ -403,11 +403,17 @@ body {
 
 /* --- 8. FOOTER BUTTON HINTS --- */
 .footer-bar { 
-    display: flex;
-    justify-content: space-between; /* Mendorong hint ke kiri dan kredit ke kanan */
+    display: grid;
+    grid-template-columns: 1fr auto 1fr; /* Spacer | Konten Tengah | Spacer */
     align-items: center;
     border-top: 1px solid rgba(255, 255, 255, 0.08); 
     padding-top: 15px; 
+}
+
+.footer-hints-container {
+    grid-column: 2 / 3; /* Posisikan di kolom tengah */
+    display: flex;
+    gap: 30px;
 }
 
 .footer-hints-container {
@@ -452,7 +458,8 @@ body {
 
 /* FIX: Styling untuk teks kredit di footer */
 .credit-text {
-    /* margin-left: auto; tidak lagi diperlukan */
+    grid-column: 3 / 4; /* Posisikan di kolom kanan */
+    justify-self: end; /* Ratakan ke kanan dalam kolomnya */
     color: rgba(255, 255, 255, 0.4);
     font-size: 0.85rem;
     display: flex;
