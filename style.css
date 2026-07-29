@@ -444,6 +444,10 @@ body {
         overflow: hidden;
         touch-action: pan-x;
     }
+    /* FIX: Menyederhanakan aturan untuk mencegah masalah rendering "zoom" */
+    body {
+        touch-action: pan-y; /* Izinkan scroll vertikal jika perlu, cegah zoom aneh */
+    } 
 
     .ps4-system { 
         padding: 15px 0px; 
@@ -459,7 +463,6 @@ body {
     .ps-tile {
         width: 100px;
         height: 100px;
-        pointer-events: none !important; /* KUNCI KLIK LANGSUNG PADA GAMBAR */
     }
 
     .main-dashboard {
