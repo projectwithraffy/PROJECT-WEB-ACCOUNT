@@ -27,6 +27,7 @@ let dragStartX = 0;
 let isThumbDragging = false; // FIX: State untuk scrollbar thumb drag
 let thumbDragStartX = 0;
 let hasDragged = false; // FIX: State untuk membedakan klik dan drag di PC
+let isAudioUnlocked = false; // FIX: State untuk tracking izin audio
 
 // --- 3. INISIALISASI ---
 
@@ -70,6 +71,18 @@ setInterval(() => {
 
 // --- 4. FUNGSI UTAMA ---
 
+// FIX: Fungsi untuk "membuka" izin audio di browser mobile
+function unlockAudioContext() {
+    if (isAudioUnlocked) return;
+    // Memainkan dan langsung menjeda suara akan meminta izin dari browser
+    sndStartup.play().then(() => sndStartup.pause()).catch(() => {});
+    sndScroll.play().then(() => sndScroll.pause()).catch(() => {});
+    sndSelect.play().then(() => sndSelect.pause()).catch(() => {});
+    isAudioUnlocked = true;
+    // Hapus listener setelah berhasil agar tidak berjalan lagi
+    document.removeEventListener('click', unlockAudioContext);
+    document.removeEventListener('touchstart', unlockAudioContext);
+}
 function playSound(audio) {
     if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
 }
@@ -161,7 +174,10 @@ function handleDrag(endX) {
 // --- PERBAIKAN: Memasang listener langsung pada loader ---
 // Ini memastikan interaksi pengguna ditangkap bahkan saat loader menutupi layar.
 loader.addEventListener('click', startSystem);
-loader.addEventListener('touchstart', startSystem, { passive: true });
+loader.addEventListener('touchstart', (e) => {
+    unlockAudioContext(); // Panggil unlock audio pada interaksi pertama di mobile
+    startSystem(e);
+}, { passive: true });
 document.addEventListener('keydown', (e) => { // Keydown tetap di document karena event keyboard tidak terpengaruh oleh lapisan elemen
     if (isLoadingFinished && !isSystemReady) startSystem(e);
 });
@@ -261,7 +277,7 @@ function onThumbDragEnd() {
 }
 
 // Listener untuk Mobile
-scrollbarThumb.addEventListener('touchstart', onThumbDragStart, { passive: true });
+scrollbarThumb.addEventListener('touchstart', onThumbDragStart, { passive: false });
 document.addEventListener('touchmove', onThumbDragMove, { passive: false });
 document.addEventListener('touchend', onThumbDragEnd);
 
@@ -269,3 +285,6 @@ document.addEventListener('touchend', onThumbDragEnd);
 scrollbarThumb.addEventListener('mousedown', onThumbDragStart);
 window.addEventListener('mousemove', onThumbDragMove);
 window.addEventListener('mouseup', onThumbDragEnd);
+
+// FIX: Listener global untuk membuka izin audio pada interaksi pertama
+document.addEventListener('click', unlockAudioContext, { once: true });
