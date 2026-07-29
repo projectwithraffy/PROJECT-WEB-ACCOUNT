@@ -444,6 +444,27 @@ body {
     font-size: 0.8rem;
 }
 
+/* FIX: Styling untuk teks kredit di footer */
+.credit-text {
+    margin-left: auto; /* Mendorong elemen ini ke paling kanan */
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+}
+
+.credit-text a {
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    margin-left: 5px;
+    transition: color 0.2s;
+    cursor: pointer;
+}
+
+.credit-text a:hover {
+    color: #fff;
+}
+
 /* --- 9. LAYOUT ADAPTIF MOBILE SMARTPHONE (POTRET & LANSKAP) --- */
 .mobile-hint { 
     display: none; 
@@ -458,7 +479,7 @@ body {
     } 
  
     .ps4-system { 
-        padding: 200px 25px; /* ATUR JARAK ATAS-BAWAH DI SINI */
+        padding: 210px 25px; /* ATUR JARAK ATAS-BAWAH DI SINI */
         height: 100vh;
         width: 100%;
         max-height: none;
