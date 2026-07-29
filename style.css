@@ -458,12 +458,12 @@ body {
     } 
 
     .ps4-system { 
-        padding: 40px 25px; /* CONTOH: Tambah padding atas-bawah menjadi 40px agar lebih rapat */
+        padding: 20px 25px; /* CONTOH: Tambah padding atas-bawah menjadi 40px agar lebih rapat */
         height: 100vh;
         width: 100%; 
         max-height: none; /* FIX: Hapus max-height agar tidak konflik */
         justify-content: space-between; /* FIX: Posisikan header di atas dan footer di bawah */
-        gap: 15px; /* CONTOH: Sedikit tambah jarak antar konten tengah */
+        gap: 10px; /* CONTOH: Sedikit tambah jarak antar konten tengah */
     } 
 
     .pc-hint { display: none !important; } 
