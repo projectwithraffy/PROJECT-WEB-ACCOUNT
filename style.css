@@ -462,8 +462,8 @@ body {
         height: 100vh;
         width: 100%; 
         max-height: none; /* FIX: Hapus max-height agar tidak konflik */
-        justify-content: center; /* FIX: Posisikan seluruh layout di tengah layar secara vertikal */
-        gap: 15px; /* FIX: Kurangi jarak antar elemen agar lebih rapat */
+        justify-content: space-between; /* FIX: Posisikan header di atas dan footer di bawah */
+        gap: 10px; /* Sesuaikan jarak antar elemen utama */
     } 
 
     .pc-hint { display: none !important; } 
