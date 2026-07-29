@@ -26,7 +26,6 @@ let dragStartX = 0;
 let isThumbDragging = false; // FIX: State untuk scrollbar thumb drag
 let thumbDragStartX = 0;
 let hasDragged = false; // FIX: State untuk membedakan klik dan drag di PC
-let isAudioUnlocked = false; // FIX: State untuk tracking izin audio
 
 // INISIALISASI
 
@@ -69,18 +68,19 @@ setInterval(() => {
 }, 1000);
 
 // FUNGSI UTAMA
-function unlockAudioContext() {
-    if (isAudioUnlocked) return;
-    const promise = sndScroll.play();
-    if (promise !== undefined) {
-        promise.then(() => sndScroll.pause()).catch(() => {});
-    }
-    isAudioUnlocked = true;
-}
 function playSound(audio) {
-    if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+     if (!audio) return;
+    // Trik untuk mobile: coba putar. Jika gagal, coba lagi setelah jeda singkat.
+    // Ini memberi browser waktu untuk memproses interaksi pengguna.
+    audio.currentTime = 0;
+    const promise = audio.play();
+    if (promise !== undefined) {
+        promise.catch(error => {
+            // Gagal? Coba lagi. Ini sering berhasil setelah interaksi pertama.
+            setTimeout(() => audio.play().catch(() => {}), 50);
+        });
+    }
 }
-
 // Fungsi ini dipanggil setelah 2.2 detik
 setTimeout(() => {
     document.getElementById('loadBar').style.display = 'none';
@@ -170,7 +170,6 @@ function handleDrag(endX) {
 // EVENT LISTENERS
 loader.addEventListener('click', startSystem);
 loader.addEventListener('touchstart', (e) => {
-    if (!isAudioUnlocked) unlockAudioContext(); 
     startSystem(e);
 }, { passive: true });
 document.addEventListener('keydown', (e) => { 
@@ -272,8 +271,3 @@ document.addEventListener('touchend', onThumbDragEnd);
 scrollbarThumb.addEventListener('mousedown', onThumbDragStart);
 window.addEventListener('mousemove', onThumbDragMove);
 window.addEventListener('mouseup', onThumbDragEnd);
-
-// FIX: Listener global untuk membuka izin audio pada interaksi pertama
-document.addEventListener('click', () => {
-    if (!isAudioUnlocked) unlockAudioContext();
-}, { always: true });
