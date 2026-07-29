@@ -470,22 +470,29 @@ body {
         padding: 10px 0 20px 0; /* FIX: Tambahkan padding bawah untuk ruang scrollbar */
         margin-left: 0;
         width: 100%; /* FIX: Hapus flexbox dari sini agar tidak mengganggu perhitungan track */
-        overflow-x: auto; /* FIX: Aktifkan scrollbar horizontal */
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
+        overflow-x: hidden; /* FIX: Nonaktifkan scroll native untuk mencegah konflik */
     }
 
-    /* FIX: Style scrollbar agar minimalis dan sesuai tema */
-    .carousel-window::-webkit-scrollbar {
+    /* FIX: Styling untuk scrollbar kustom */
+    .custom-scrollbar-container {
+        width: 100%;
         height: 4px;
-    }
-    .carousel-window::-webkit-scrollbar-track {
         background: rgba(255, 255, 255, 0.05);
         border-radius: 2px;
+        margin-top: -10px; /* Posisikan lebih dekat dengan carousel */
+        position: relative;
+        overflow: hidden;
     }
-    .carousel-window::-webkit-scrollbar-thumb {
+
+    .custom-scrollbar-thumb {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
         background: rgba(255, 255, 255, 0.2);
         border-radius: 2px;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* Samakan transisi dengan carousel */
+        will-change: width, transform;
     }
 
     .carousel-track {
