@@ -73,11 +73,14 @@ setInterval(() => {
 
 // FIX: Fungsi untuk "membuka" izin audio di browser mobile
 function unlockAudioContext() {
-    // Cukup panggil 'load()' pada semua audio. Ini adalah trik yang seringkali cukup
-    // untuk memberi sinyal ke browser bahwa audio akan digunakan, tanpa memutarnya.
-    sndStartup.load();
-    sndScroll.load();
-    sndSelect.load();
+    if (isAudioUnlocked) return;
+    // Metode paling andal: coba putar dan langsung jeda.
+    // Ini "membangunkan" AudioContext di browser mobile.
+    const promise = sndScroll.play();
+    if (promise !== undefined) {
+        promise.then(() => sndScroll.pause()).catch(() => {});
+    }
+    isAudioUnlocked = true;
 }
 function playSound(audio) {
     if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
@@ -112,8 +115,17 @@ function updatePS4UI(targetIndex) {
     });
 
     const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
-    const currentStep = isTouchDevice ? 125 : 165; // 100px (lebar tile) + 25px (gap)
     
+    // FIX: Hitung jarak geser secara dinamis untuk mengatasi bug di mode lanskap
+    let currentStep;
+    if (isTouchDevice) {
+        const isLandscape = window.matchMedia("(orientation: landscape)").matches && window.innerHeight <= 500;
+        const tileWidth = isLandscape ? 90 : 100; // 90px di lanskap, 100px di potret
+        currentStep = tileWidth + 25; // tile width + gap
+    } else {
+        currentStep = 140 + 25; // 165px untuk desktop
+    }
+
     const trackOffset = -(targetIndex * currentStep);
     track.style.transform = `translate3d(${trackOffset}px, 0, 0)`;
     
