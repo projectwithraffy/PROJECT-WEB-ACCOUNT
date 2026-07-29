@@ -458,7 +458,7 @@ body {
     } 
  
     .ps4-system { 
-        padding: 180px 25px; /* ATUR JARAK ATAS-BAWAH DI SINI */
+        padding: 200px 25px; /* ATUR JARAK ATAS-BAWAH DI SINI */
         height: 100vh;
         width: 100%;
         max-height: none;
