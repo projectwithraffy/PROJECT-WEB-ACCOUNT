@@ -75,8 +75,6 @@ setTimeout(() => {
     loadText.textContent = "PRESS ANY KEY OR CLICK TO START";
     loadText.classList.add('blink-text');
     isLoadingFinished = true;
-    // FIX: Membuat loader bisa "ditembus" oleh klik/sentuhan
-    loader.classList.add('loader-interactive'); 
 }, 2200);
 
 function startSystem(event) {
