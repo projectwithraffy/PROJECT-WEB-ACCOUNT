@@ -432,21 +432,17 @@ body {
 }
 
 @media (max-width: 768px), (max-height: 500px) {
-    html, body {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        touch-action: pan-x;
-    }
-    /* FIX: Menyederhanakan aturan untuk mencegah masalah rendering "zoom" */
+    /* FIX: Menghapus position:fixed dan menyederhanakan aturan untuk mencegah "zoom" */
     body {
-        touch-action: pan-y; /* Izinkan scroll vertikal jika perlu, cegah zoom aneh */
+        height: 100vh; /* Pastikan body mengisi seluruh tinggi layar */
+        overflow: hidden; /* Cegah scroll yang tidak diinginkan */
+        touch-action: none; /* Nonaktifkan semua aksi sentuh default browser (zoom, pan) */
     } 
 
     .ps4-system { 
         padding: 15px 0px; 
         height: 100vh;
+        width: 100%; /* Pastikan sistem mengisi lebar penuh */
         max-height: none; /* FIX: Hapus max-height agar tidak konflik */
         justify-content: space-between; /* FIX: Gunakan space-between agar elemen menempel di atas dan bawah */
     } 
@@ -466,13 +462,8 @@ body {
         margin-top: -10px;
     }
     
-    .nav-arrow {
-        display: flex !important; 
-        top: 50%;
-    }
-    
-    .left-arrow { left: 10px; }   
-    .right-arrow { right: 10px; } 
+    /* FIX: Sembunyikan tombol panah karena kita akan menggunakan swipe */
+    .nav-arrow { display: none !important; }
     
     .carousel-window {
         padding: 10px 0; 
