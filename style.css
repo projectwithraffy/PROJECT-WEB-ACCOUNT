@@ -458,7 +458,7 @@ body {
     } 
  
     .ps4-system { 
-        padding: 20px 0px; 
+        padding: 15px 5px; 
         padding: 15px 25px; /* FIX: Tambahkan padding horizontal agar tidak mentok kiri-kanan */
         height: 100vh;
         width: 100%; /* Pastikan sistem mengisi lebar penuh */
